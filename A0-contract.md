@@ -49,9 +49,9 @@ Student Number:	20239497
 
 Team Member #3:
 
-Name:
+Name: Benjamin Tiong
 
-Student Number:	
+Student Number:	20231872
 
 
 Team Member #4:
