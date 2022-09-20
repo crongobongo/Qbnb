@@ -35,9 +35,9 @@ We each promise to make our best effort to ensure that the team works together a
 
 Team Member #1:
 
-Name: Kevin Zhang
+Name: Dallin Whitford
 
-Student Number:	20231800
+Student Number:	20234831
 
 
 Team Member #2:
