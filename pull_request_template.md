@@ -20,12 +20,6 @@ Please describe the tests that you ran to verify your changes. Provide instructi
 - [ ] Test A
 - [ ] Test B
 
-**Test Configuration**:
-* Firmware version:
-* Hardware:
-* Toolchain:
-* SDK:
-
 # Checklist:
 
 - [ ] My code follows the style guidelines of this project
@@ -36,3 +30,12 @@ Please describe the tests that you ran to verify your changes. Provide instructi
 - [ ] I have added tests that prove my fix is effective or that my feature works
 - [ ] New and existing unit tests pass locally with my changes
 - [ ] Any dependent changes have been merged and published in downstream modules
+
+# Review:
+
+@mentions of the person or team responsible for reviewing proposed changes.
+- @crongobongo to be reviewed by @willjb12 and @bengo3022
+- @dallin00 to be reviewed by @willjb12 and @crongobongo
+- @willjb12 to be reviewed by @dallin00 and @crongobongo
+- @crongobongo to be reviewed by @bengo3022 and @dallin00
+
