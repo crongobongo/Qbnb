@@ -35,7 +35,7 @@ Please describe the tests that you ran to verify your changes. Provide instructi
 
 Please include @mentions of the person or team responsible for reviewing proposed changes.
 - @crongobongo to be reviewed by @willjb12 and @bengo3022
-- @dallin00 to be reviewed by @willjb12 and @crongobongo
+- @dallin00 to be reviewed by @bengo3022 and @crongobongo
 - @willjb12 to be reviewed by @dallin00 and @crongobongo
-- @crongobongo to be reviewed by @bengo3022 and @dallin00
+- @bengo3022 to be reviewed by @willjb12 and @dallin00
 
