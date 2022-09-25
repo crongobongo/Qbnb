@@ -49,18 +49,18 @@ reviews = Review.query.all()
 
 print("users:")
 for i in users:
-    print("id:",i.id)
-    print("username:",i.username)
+    print("id:", i.id)
+    print("username:", i.username)
     print("email:",i.email)
 
 print("\nguests:")
 for i in guests:
-    print("id:",i.id)
-    print("username:",i.username)
+    print("id:", i.id)
+    print("username:", i.username)
     print("email:",i.email)
 
 print("\nreviews:")
 for i in reviews:
-    print("id:",i.id)
-    print("reviewer:",i.reviewer)
+    print("id:", i.id)
+    print("reviewer:", i.reviewer)
     print("star rating:",i.star_rating)
