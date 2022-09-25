@@ -28,6 +28,13 @@ class Review(db.Model):
     user_review = db.Column(db.String(140), unique=True, nullable=False)
 
 
+class Listing(db.Model):
+    owner = db.Column(db.String(), primary_key=True)
+    location = db.Column(db.String(), primary_key=True)
+    cost = db.Column(db.Integer, unique=True, nullable=False)
+    past_guests = db.Column(db.String(), unique=True, nullable=False)
+    reviews = db.Column(db.String(), unique=True, nullable=False)
+
 db.create_all()
 
 # add test user to database
@@ -39,13 +46,18 @@ db.session.add(VerifiedGuest(username="guest1", email="guest1@example.com"))
 db.session.commit()
 
 # add test review to database
-db.session.add(Review(reviewer="guest1", star_rating=5))
+db.session.add(Review(reviewer="guest1", star_rating=5, email="123@hotmail.com", user_review="very nice"))
+db.session.commit()
+
+# add test review to database
+db.session.add(Listing(owner="mark townsley", location="1 aberdeen", cost=250, past_guests="userid1,userid2" , reviews = "reviewid1,reviewid2"))
 db.session.commit()
 
 # test code for verifying entries in database
 users = User.query.all()
 guests = VerifiedGuest.query.all()
 reviews = Review.query.all()
+listings = Listing.query.all()
 
 print("users:")
 for i in users:
@@ -61,6 +73,13 @@ for i in guests:
 
 print("\nreviews:")
 for i in reviews:
-    print("id:", i.id)
     print("reviewer:", i.reviewer)
     print("star rating:",i.star_rating)
+    print("user review:", i.user_review)
+    print("email:", i.email)
+
+print("\nlistings:")
+for i in listings:
+    print("owner:", i.owner)
+    print("location:", i.location)
+    print("cost:", i.cost)
