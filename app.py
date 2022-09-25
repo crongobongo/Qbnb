@@ -1,18 +1,18 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
-# check style!!!!!
-
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 db = SQLAlchemy(app)
+
 
 # edit this to make it properly suit user entity
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(), unique=True, nullable=False)
     email = db.Column(db.String(), unique=True, nullable=False)
+
 
 # need to edit to make it properly suit guest entity
 class VerifiedGuest(db.Model):
@@ -25,7 +25,7 @@ class Review(db.Model):
     star_rating = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     user_review = db.Column(db.String(140), unique=True, nullable=False)
-
+    
 db.create_all()
 
 # add test user to database
@@ -39,7 +39,6 @@ db.session.commit()
 # add test review to database
 db.session.add(Review(reviewer="guest1", star_rating=5))
 db.session.commit()
-
 
 # test code for verifying entries in database
 users = User.query.all()
