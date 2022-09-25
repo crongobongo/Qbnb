@@ -20,14 +20,12 @@ class VerifiedGuest(db.Model):
     username = db.Column(db.String(), unique=True, nullable=False)
     email = db.Column(db.String(), unique=True, nullable=False)
 
-
 class Review(db.Model):
     reviewer = db.Column(db.Integer, primary_key=True)
     star_rating = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     user_review = db.Column(db.String(140), unique=True, nullable=False)
-
-
+    
 db.create_all()
 
 # add test user to database
