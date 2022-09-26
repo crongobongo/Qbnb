@@ -20,7 +20,6 @@ class VerifiedGuest(db.Model):
     username = db.Column(db.String(), unique=True, nullable=False)
     email = db.Column(db.String(), unique=True, nullable=False)
 
-
 class Review(db.Model):
     reviewer = db.Column(db.Integer, primary_key=True)
     star_rating = db.Column(db.Integer, primary_key=True)
@@ -49,7 +48,7 @@ db.session.commit()
 db.session.add(Review(reviewer="guest1", star_rating=5, email="123@hotmail.com", user_review="very nice"))
 db.session.commit()
 
-# add test review to database
+# add test listing to database
 db.session.add(Listing(owner="mark townsley", location="1 aberdeen", cost=250, past_guests="userid1,userid2" , reviews = "reviewid1,reviewid2"))
 db.session.commit()
 
