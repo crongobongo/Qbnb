@@ -161,7 +161,6 @@ def update_user(old_email, username, new_email, billing_address, postal_code):
 
 print(update_user("cheese@email.com", "jeans", None, None, None))
 
-
     # R3-1: A user is only able to update his/her user name, user email, billing address, and postal code.
     # R3-2: postal code should be non-empty, alphanumeric-only, and no special characters such as !.
     # R3-3: Postal code has to be a valid Canadian postal code.
