@@ -99,7 +99,7 @@ db.create_all()
 #     # actually save the user object
 #     db.session.commit()
 
-#     return True
+    # return True
 
 # email = db.Column(db.String(), unique=True, nullable=False)
 #     password = db.Column(db.String(), nullable=False)

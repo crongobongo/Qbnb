@@ -1,5 +1,5 @@
 import os
-# from qbnb import app
+from qbnb import app
 
 '''
 This file defines what to do BEFORE running any test cases:
@@ -14,7 +14,7 @@ def pytest_sessionstart():
     db_file = 'db.sqlite'
     if os.path.exists(db_file):
         os.remove(db_file)
-    # app.app_context().push()
+    app.app_context().push()
 
 
 def pytest_sessionfinish():
