@@ -211,18 +211,17 @@ def update_user(old_email, username, new_email, billing_address, postal_code):
     return user
 
 
-'''
-R4-1: The title of the product has to be alphanumeric-only, and space allowed only if it is not as prefix and suffix.
-R4-2: The title of the product is no longer than 80 characters.
-R4-3: The description of the product can be arbitrary characters, with a minimum length of 20 characters and a maximum of 2000 characters.
-R4-4: Description has to be longer than the product's title.
-R4-5: Price has to be of range [10, 10000].
-R4-6: last_modified_date must be after 2021-01-02 and before 2025-01-02.
-R4-7: owner_email cannot be empty. The owner of the corresponding product must exist in the database.
-R4-8: A user cannot create products that have the same title.
-'''
 def create_listing(title_product, description_product, price_product, date, user_email):
-
+    '''
+    R4-1: The title of the product has to be alphanumeric-only, and space allowed only if it is not as prefix and suffix.
+    R4-2: The title of the product is no longer than 80 characters.
+    R4-3: The description of the product can be arbitrary characters, with a minimum length of 20 characters and a maximum of 2000 characters.
+    R4-4: Description has to be longer than the product's title.
+    R4-5: Price has to be of range [10, 10000].
+    R4-6: last_modified_date must be after 2021-01-02 and before 2025-01-02.
+    R4-7: owner_email cannot be empty. The owner of the corresponding product must exist in the database.
+    R4-8: A user cannot create products that have the same title.
+    '''
     # check if the title of the product meets the requirements
     if len(title_product) <= 80 and title_product[0] != " " and title_product[-1] != " ":
         # go through each word and check that they are only alphanumerics
