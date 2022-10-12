@@ -1,4 +1,4 @@
-from qbnb.models import login, update_user, db, User
+from qbnb.models import login, update_user, db, User, Listing
 # from qbnb.models import register, login
 
 
@@ -18,6 +18,9 @@ db.session.add(User(email="test0@test.com", password="123aB!",
 db.session.add(User(email="test1@test.com", password="456ZxY?", 
                     username="user1", billing_address="111", 
                     postal_code="", balance="000"))
+db.session.add(Listing(title="Neck Crusher", description="Snaps necks", 
+                    price=100, last_modified_date="2021-04-04", 
+                    owner_id="Nample"))
 db.session.commit()
 
 

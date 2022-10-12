@@ -1,5 +1,6 @@
 from qbnb import app
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 import re
 import email
 
@@ -43,7 +44,6 @@ class Review(db.Model):
 
 class Listing(db.Model):
     # may need to edit these, eg. not sure about owner_id?
-    id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(), primary_key=True)
     description = db.Column(db.String(), primary_key=True)
     price = db.Column(db.Integer, unique=True, nullable=False)
@@ -209,3 +209,35 @@ def update_user(old_email, username, new_email, billing_address, postal_code):
         return None
     return user
 
+
+# R5-1: One can update all attributes of the listing, except owner_id and last_modified_date.
+# R5-2: Price can be only increased but cannot be decreased :)
+# R5-3: last_modified_date should be updated when the update operation is successful.
+# R5-4: When updating an attribute, one has to make sure that it follows the same requirements as above.
+def update_listing(owner_id, title, description, price, last_modified_date):
+    '''
+    Update user information
+      Parameters:
+        owner_id (string): owner's id
+        title (string): to update owner's title
+        desciption (string): to update owner's description
+        price (intger): to update owner's price
+        last_modified date (string): to update owner's last_modified_date
+      Returns:
+        The listing object if update succeeded otherwise False
+    '''
+    # checks to make sure listing to be updated is a valid listing
+    listing = Listing.query.filter_by(owner_id).first()
+    if listing is None:
+        return False
+    # checks to make sure each attribute is successfull
+
+    # checks to make sure that price can only be increased  
+    if price < listing.price:
+        return False
+    # updates the attributes of listing
+    listing.title = title
+    listing.description = description
+    listing.price = price
+    # updates the last_modified_date since all operations were successfull
+    listing.last_modified_date = date.today()
