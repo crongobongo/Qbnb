@@ -15,8 +15,8 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(), unique=True, nullable=False)
     password = db.Column(db.String(), nullable=False)
-    username = db.Column(db.String(), unique=True, nullable=False)
-    billing_address = db.Column(db.String(), unique=True, nullable=False)
+    username = db.Column(db.String(), unique=False, nullable=False)
+    billing_address = db.Column(db.String(), unique=False, nullable=False)
     postal_code = db.Column(db.String(), nullable=False)
     balance = db.Column(db.Integer(), nullable=False)
 
@@ -85,11 +85,7 @@ db.create_all()
 def register(name, email, password):
     # check that neither password or user is empty
     if (password is None) or (email is None):
-        print("empty 1")
         return False
-
-    # create id
-    id = hash(email) & ((1 << 64) - 1)
 
     # check that email is valid
     email_regex = re.compile(r"([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]\
@@ -97,20 +93,18 @@ def register(name, email, password):
     /-9=?A-Z^-~]+)*|\[[\t -Z^-~]*])")
 
     if not re.match(email_regex, email):
-        print("invalid email")
         return False
     
     # check password is valid
     password_regex = re.compile(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*[-+_\
     !@#$%^&*., ?])\S{6,}$")
     if not re.match(password_regex, password):
-        print("invalid password")
         return False
 
-    # check username is valid)
+    # check username is valid
     valid_name = True
     user_list = list(name)
-    if (len(name) <= 2) or (len(name) >= 20):
+    if ((len(name) <= 2) or (len(name) >= 20)):
         return False
 
     for i in range(len(user_list)):
@@ -122,7 +116,6 @@ def register(name, email, password):
                 valid_name = False
 
     if valid_name is False:
-        print("invalid username")
         return False
 
     # check if the email has been used:
@@ -133,7 +126,7 @@ def register(name, email, password):
     # create a new user 
     # shipping address is empty, postal code is empty, balance = 100
      
-    user = User(username=name, email=email, password=password, id=id, 
+    user = User(username=name, email=email, password=password, 
                 billing_address='', postal_code='', balance=100)
     # add it to the current database session
     db.session.add(user)
