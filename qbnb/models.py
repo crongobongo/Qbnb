@@ -223,19 +223,23 @@ def create_listing(title_product, description_product, price_product, date, user
     R4-8: A user cannot create products that have the same title.
     '''
     # check if the title of the product meets the requirements
-    if len(title_product) <= 80 and title_product[0] != " " and title_product[-1] != " ":
-        # go through each word and check that they are only alphanumerics
-        title_check_regex = title_product.split(" ")
-        for word in title_check_regex:
-            if not re.match(r'^[a-zA-Z0-9]+$', word):
-                return False
+    if len(title_product) <= 80:
+        if title_product[0] != " " and title_product[-1] != " ":
+            # go through each word and check that they are only alphanumerics
+            title_check_regex = title_product.split(" ")
+            for word in title_check_regex:
+                if not re.match(r'^[a-zA-Z0-9]+$', word):
+                    return False
     else:
         return False
     
     # check that the description of the product meets the requirements
-    if len(description_product) < len(title_product) or len(description_product) < 20 or len(description_product) > 2000:
+    if len(description_product) < len(title_product):
+        return False
+    elif len(description_product) < 20 or len(description_product) > 2000:
         return False
 
+    # price should be in range [10:10000]    
     if price_product < 10 or price_product > 10000:
         return False
 
@@ -272,7 +276,7 @@ def create_listing(title_product, description_product, price_product, date, user
         return False
     
     # if the listing requirements all pass, then add it to the database and return True
-    db.session.add(Listing(title=title_product, description=description_product, 
+    db.session.add(Listing(title=title_product, description=description_product,
     price=price_product, last_modified_date=date, owner_id=user_email))
     db.session.commit()
     return True
