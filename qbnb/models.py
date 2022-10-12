@@ -234,6 +234,8 @@ def create_listing(title_product, description_product, price_product, date, user
             for word in title_check_regex:
                 if not re.match(r'^[a-zA-Z0-9]+$', word):
                     return False
+        else:
+            return False
     else:
         return False
     
