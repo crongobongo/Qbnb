@@ -239,3 +239,80 @@ def update_user(old_email, username, new_email, billing_address, postal_code):
         return None
     return user
 
+def create_listing(title_prod, desc_prod, price_prod, date, user_email):
+    '''
+    R4-1: The title of the product has to be alphanumeric-only,
+          and space allowed only if it is not as prefix and suffix.
+    R4-2: The title of the product is no longer than 80 characters.
+    R4-3: The description of the product can be arbitrary characters,
+          with a minimum length of 20 characters, 
+          and a maximum of 2000 characters.
+    R4-4: Description has to be longer than the product's title.
+    R4-5: Price has to be of range [10, 10000].
+    R4-6: last_modified_date must be after 2021-01-02 and before 2025-01-02.
+    R4-7: owner_email cannot be empty. The owner of the corresponding product
+          must exist in the database.
+    R4-8: A user cannot create products that have the same title.
+    '''
+    # check if the title of the product meets the requirements
+    if len(title_prod) <= 80:
+        if title_prod[0] != " " and title_prod[-1] != " ":
+            # go through each word and check that they are only alphanumerics
+            title_check_regex = title_prod.split(" ")
+            for word in title_check_regex:
+                if not re.match(r'^[a-zA-Z0-9]+$', word):
+                    return False
+        else:
+            return False
+    else:
+        return False
+    
+    # check that the description of the product meets the requirements
+    if len(desc_prod) < len(title_prod):
+        return False
+    elif len(desc_prod) < 20 or len(desc_prod) > 2000:
+        return False
+
+    # price should be in range [10:10000]    
+    if price_prod < 10 or price_prod > 10000:
+        return False
+
+    # Year-Month-Date check if valid
+    try:
+        # check that the date exists in the calender
+        datetime.datetime.strptime(date, '%Y-%m-%d')
+
+        # check that the year is between 2021 and 2025,
+        # if so check that its valid
+        if int(date[:4]) >= 2021 and int(date[:4]) <= 2025:
+            if date[:4] == "2021" and date[5:7] == "01":
+                if date[8:10] == "01":
+                    return False
+
+            elif date[:4] == "2025" and date[5:7] == "01":
+                if date[8:10] != "01" or date[8:10] != "02":
+                    return False                 
+        else:
+            return False
+    except ValueError:
+        return False
+
+    # check owner id
+    user = User.query.filter_by(email=user_email).first()
+    title_exists = Listing.query.filter_by(title=title_prod).first()
+
+    # check that the email isn't empty or does not exist in the database
+    if user_email == " ":
+        return False
+    if user is None:
+        return False
+    # make sure the title hasn't been used before
+    if not (title_exists is None):
+        return False
+    
+    # if the listing requirements all pass, then add it to the
+    # database and return True
+    new_listing = Listing(title=title_prod, description=desc_prod, price=price_prod, last_modified_date=date, owner_id=user_email)
+    db.session.add(new_listing)
+    db.session.commit()
+    return True
