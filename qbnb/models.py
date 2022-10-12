@@ -211,7 +211,7 @@ def update_user(old_email, username, new_email, billing_address, postal_code):
     return user
 
 
-def create_listing(title_product, description_product, price_product, date, user_email):
+def create_listing(title_prod, desc_prod, price_prod, date, user_email):
     '''
     R4-1: The title of the product has to be alphanumeric-only,
           and space allowed only if it is not as prefix and suffix.
@@ -227,10 +227,10 @@ def create_listing(title_product, description_product, price_product, date, user
     R4-8: A user cannot create products that have the same title.
     '''
     # check if the title of the product meets the requirements
-    if len(title_product) <= 80:
-        if title_product[0] != " " and title_product[-1] != " ":
+    if len(title_prod) <= 80:
+        if title_prod[0] != " " and title_prod[-1] != " ":
             # go through each word and check that they are only alphanumerics
-            title_check_regex = title_product.split(" ")
+            title_check_regex = title_prod.split(" ")
             for word in title_check_regex:
                 if not re.match(r'^[a-zA-Z0-9]+$', word):
                     return False
@@ -240,13 +240,13 @@ def create_listing(title_product, description_product, price_product, date, user
         return False
     
     # check that the description of the product meets the requirements
-    if len(description_product) < len(title_product):
+    if len(desc_prod) < len(title_prod):
         return False
-    elif len(description_product) < 20 or len(description_product) > 2000:
+    elif len(desc_prod) < 20 or len(desc_prod) > 2000:
         return False
 
     # price should be in range [10:10000]    
-    if price_product < 10 or price_product > 10000:
+    if price_prod < 10 or price_prod > 10000:
         return False
 
     # Year-Month-Date check if valid
@@ -271,7 +271,7 @@ def create_listing(title_product, description_product, price_product, date, user
 
     # check owner id
     user = User.query.filter_by(email=user_email).first()
-    title_exists = Listing.query.filter_by(title=title_product).first()
+    title_exists = Listing.query.filter_by(title=title_prod).first()
 
     # check that the email isn't empty or does not exist in the database
     if user_email == " ":
@@ -284,6 +284,7 @@ def create_listing(title_product, description_product, price_product, date, user
     
     # if the listing requirements all pass, then add it to the
     # database and return True
-    db.session.add(Listing(title=title_product, description=description_product, price=price_product, last_modified_date=date, owner_id=user_email))
+    new_listing = Listing(title=title_prod, description=desc_prod, price=price_prod, last_modified_date=date, owner_id=user_email)
+    db.session.add(new_listing)
     db.session.commit()
     return True
