@@ -1,17 +1,8 @@
 from qbnb.models import create_listing, login, update_user, db, User
+
 # from qbnb.models import register, login
 
-
-# def test_r1_7_user_register():
-#     '''
-#     Testing R1-7: If the email has been used, the operation failed.
-#     '''
-
-#     assert register('user0', 'test0@test.com', '123aB!') is True
-#     assert register('user0', 'test1@test.com', '456ZxY?') is True
-#     assert register('user1', 'test0@test.com', '123456') is False
-
-# test users for login because i dont have register function
+# test users for login
 db.session.add(User(email="test0@test.com", password="123aB!", 
                     username="user0", billing_address="000", 
                     postal_code="", balance="000"))
@@ -19,6 +10,117 @@ db.session.add(User(email="test1@test.com", password="456ZxY?",
                     username="user1", billing_address="111", 
                     postal_code="", balance="000"))
 db.session.commit()
+
+
+def test_r1_1_user_register():
+    '''
+    Testing R1-1: Email cannot be empty. password cannot be empty
+    '''
+
+    assert register('userr11a', 'testr11a@test.com', '!2ASDa') is True
+    assert register('userr11b', '', '!2ASDa') is False
+    assert register('userr11c', 'testr11b@test.com', '') is False
+    assert register('userr11d', '', '') is False
+
+
+def test_r1_2_user_register():
+    '''
+    Testing R1-2: A user is uniquely identified 
+    by his/her user id - automatically generated.
+    '''
+
+    register('userr12a', "testr12a@test.com", "!$weAr14")
+    register('userr12b', "testr12b@test.com", "!$weAr14")
+    
+    user_one = User.query.filter_by(email="testr12a@test.com").first()
+    user_two = User.query.filter_by(email="testr12b@test.com").first()
+    
+    assert (user_one.id == user_two.id) is False
+
+    
+def test_r1_3_user_register():
+    '''
+    Testing R1-3: The email has to follow addr-spec defined in RFC 5322
+    '''
+
+    assert register('userr13a', 'testr13acom', "AaBc!23") is False
+
+
+def test_r1_4_user_register():
+    '''
+    Testing R1-4: Password has to meet the required
+     complexity: minimum length 6, 
+    at least one upper case, at least one lower case, 
+    and at least one special character.
+    '''
+
+    assert register('userr14a', 'testr14a@test.com', '!2Aa') is False
+    assert register('user14b', 'testr14b@test.com', 'hello123') is False
+    assert register('user14c', 'testr14c@test.com', 'ASD123!!!') is False
+    assert register('userr14d', 'testr14d@test.com', '123ASDads') is False
+
+
+def test_r1_5_user_register():
+    '''
+    Testing R1-5: User name has to be non-empty, alphanumeric-only,
+    and space allowed only if it is not as the prefix or suffix.
+    '''
+
+    assert register("", 'testr15a@test.com', '123!asdA') is False
+    assert register('aasd@@@', 'testr15b@test.com', '123!asdA') is False
+    assert register(' Hello', 'testr15c@test.com', '123!asdA') is False
+
+
+def test_r1_6_user_register():
+    '''
+    Testing R1-6:  User name has to be longer than 2 
+    characters and less than 20 characters.
+    '''
+
+    assert register('aa', "testr16a@test.com", "123!asdA") is False
+    assert register('aaaaaAAAAAbbbbbBBBBBc', 
+                    "testr16b@test.com", "123!asdA") is False
+
+
+def test_r1_7_user_register():
+    '''
+    Testing R1-7: If the email has been used, the operation failed.
+    '''
+
+    assert register('userr17a', 'testr17a@test.com', '123aB!') is True
+    assert register('userr17b', 'testr17b@test.com', '456ZxY?') is True
+    assert register('userr17c', 'testr17a@test.com', '12Aac>56') is False
+
+
+def test_r1_8_user_register():
+    '''
+    Testing R1-8: Shipping address is empty at the time of registration.
+    '''
+
+    register('userr18', "testr18@test.com", "!$weAr14")
+    user = User.query.filter_by(email="testr18@test.com").first()
+    assert (user.billing_address == '') is True
+
+
+def test_r1_9_user_register():
+    '''
+    Testing R1-9: Postal is empty at the time of registration.
+    '''
+
+    register('userr19', "testr19@test.com", "!$weAr14")
+    user = User.query.filter_by(email="testr19@test.com").first()
+    assert (user.postal_code == '') is True
+
+
+def test_r1_10_user_register():
+    '''
+    Testing R1-10: Balance should be initialized as 
+    100 at the time of registration. q
+    '''
+
+    register('userr110', "testr110@test.com", "!$weAr14")
+    user = User.query.filter_by(email="testr110@test.com").first()
+    assert (user.balance == 100) is True
 
 
 def test_r2_1_login():
