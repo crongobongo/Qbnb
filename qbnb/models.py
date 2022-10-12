@@ -15,8 +15,8 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(), unique=True, nullable=False)
     password = db.Column(db.String(), nullable=False)
-    username = db.Column(db.String(), unique=True, nullable=False)
-    billing_address = db.Column(db.String(), unique=True, nullable=False)
+    username = db.Column(db.String(), unique=False, nullable=False)
+    billing_address = db.Column(db.String(), unique=False, nullable=False)
     postal_code = db.Column(db.String(), nullable=False)
     balance = db.Column(db.Integer(), nullable=False)
 
@@ -82,29 +82,59 @@ db.create_all()
 # db.create_all()
 
 
-# def register(name, email, password):
-#     '''
-#     Register a new user
-#       Parameters:
-#         name (string):     user name
-#         email (string):    user email
-#         password (string): user password
-#       Returns:
-#         True if registration succeeded otherwise False
-#     '''
-#     # check if the email has been used:
-#     existed = User.query.filter_by(email=email).all()
-#     if len(existed) > 0:
-#         return False
+def register(name, email, password):
+    # check that neither password or user is empty
+    if (password is None) or (email is None):
+        return False
 
-#     # create a new user
-#     user = User(username=name, email=email, password=password)
-#     # add it to the current database session
-#     db.session.add(user)
-#     # actually save the user object
-#     db.session.commit()
+    # check that email is valid
+    email_regex = re.compile(r"([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]\
+    +)*|\"([]!#-[^-~ \t]|(\\[\t -~]))+\")@([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+\
+    /-9=?A-Z^-~]+)*|\[[\t -Z^-~]*])")
 
-#     return True
+    if not re.match(email_regex, email):
+        return False
+    
+    # check password is valid
+    password_regex = re.compile(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*[-+_\
+    !@#$%^&*., ?])\S{6,}$")
+    if not re.match(password_regex, password):
+        return False
+
+    # check username is valid
+    valid_name = True
+    user_list = list(name)
+    if ((len(name) <= 2) or (len(name) >= 20)):
+        return False
+
+    for i in range(len(user_list)):
+        if (i == 0) or (i == len(user_list) - 1):
+            if (user_list[i].isalnum() is False):
+                valid_name = False
+        else:
+            if (user_list[i].isalnum() is not True) and (user_list[i] != ' '):
+                valid_name = False
+
+    if valid_name is False:
+        return False
+
+    # check if the email has been used:
+    existed = User.query.filter_by(email=email).all()
+    if len(existed) > 0:
+        return False
+
+    # create a new user 
+    # shipping address is empty, postal code is empty, balance = 100
+     
+    user = User(username=name, email=email, password=password, 
+                billing_address='', postal_code='', balance=100)
+    # add it to the current database session
+    db.session.add(user)
+    # actually save the user object
+    db.session.commit()
+
+    return True
+
 
 # email = db.Column(db.String(), unique=True, nullable=False)
 #     password = db.Column(db.String(), nullable=False)
