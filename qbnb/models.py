@@ -239,6 +239,7 @@ def update_user(old_email, username, new_email, billing_address, postal_code):
         return None
     return user
 
+
 def create_listing(title_prod, desc_prod, price_prod, date, user_email):
     '''
     R4-1: The title of the product has to be alphanumeric-only,
@@ -312,6 +313,10 @@ def create_listing(title_prod, desc_prod, price_prod, date, user_email):
     
     # if the listing requirements all pass, then add it to the
     # database and return True
-    db.session.add(Listing(title=title_prod, description=desc_prod, price=price_prod, last_modified_date=date, owner_id=user_email))
+    title=title_prod
+    description=desc_prod
+    price=price_prod
+    db.session.add(Listing(title, description, price, 
+    last_modified_date=date, owner_id=user_email))
     db.session.commit()
     return True
