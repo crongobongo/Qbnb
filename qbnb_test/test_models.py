@@ -181,6 +181,7 @@ def test_r3_4_update():
     # revert to old username for testing purposes
     # user = update_user('test0@test.com', "user0", "", "", "A1A1A1")
 
+
 def test_r4_1_create_list():
     '''
     Testing R4-1: Title of the product has to be alphanumeric-only,
