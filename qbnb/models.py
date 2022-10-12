@@ -228,7 +228,7 @@ def create_listing(title_product, description_product, price_product, date, user
         # go through each word and check that they are only alphanumerics
         title_check_regex = title_product.split(" ")
         for word in title_check_regex:
-            if not re.match(r'^[a-zA-Z0-9]+$',word):
+            if not re.match(r'^[a-zA-Z0-9]+$', word):
                 return False
     else:
         return False
