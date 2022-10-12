@@ -272,6 +272,7 @@ def create_listing(title_product, description_product, price_product, date, user
         return False
     
     # if the listing requirements all pass, then add it to the database and return True
-    db.session.add(Listing(title=title_product, description=description_product, price=price_product, last_modified_date=date, owner_id=user_email))
+    db.session.add(Listing(title=title_product, description=description_product, 
+    price=price_product, last_modified_date=date, owner_id=user_email))
     db.session.commit()
     return True
