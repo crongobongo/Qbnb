@@ -220,7 +220,8 @@ def test_r4_2_create_list():
 def test_r4_3_create_list():
     '''
     Testing R4-3: The description of the product can be arbitrary characters,
-                  with a minimum length of 20 characters and a maximum of 2000 characters.
+                  with a minimum length of 20 characters and a maximum of
+                  2000 characters.
     '''
     description = "This is a new home"
     date = "2021-01-06"
@@ -262,7 +263,8 @@ def test_r4_5_create_list():
 
 def test_r4_6_create_list():
     '''
-    Testing R4-6: last_modified_date must be after 2021-01-02 and before 2025-01-02.
+    Testing R4-6: last_modified_date must be after 2021-01-02
+                  and before 2025-01-02.
     '''
     description = "This is a new nice home"
     date1 = "2021-01-01"
@@ -285,8 +287,8 @@ def test_r4_6_create_list():
 
 def test_r4_7_create_list():
     '''
-    Testing R4-7: owner_email cannot be empty. The owner of the corresponding product
-                  must exist in the database.
+    Testing R4-7: owner_email cannot be empty. The owner of the corresponding
+                  product must exist in the database.
     '''
     # empty owner email
     description = "This is a new nice home"
