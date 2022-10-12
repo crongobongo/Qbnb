@@ -186,55 +186,88 @@ def test_r4_1_create_list():
     Testing R4-1: Title of the product has to be alphanumeric-only,
                   and space allowed only if it is not as prefix and suffix. 
     '''
-    print (create_listing(" New Home","This is a new nice home",1000,"2021-01-06","test0@test.com"))
-    print (create_listing("New1 2Home ","This is a new nice home",1000,"2021-01-06","test0@test.com"))
-    print (create_listing("New1 2Home","This is a new nice home",1000,"2021-01-06","test0@test.com"))
+    #leading space in title
+    listing = create_listing(" New Home", "This is a new nice home", 1000, "2021-01-06", "test0@test.com")
+    assert listing is False
+
+    #trailing space in title
+    listing = create_listing("New1 2Home ", "This is a new nice home", 1000, "2021-01-06", "test0@test.com")
+    assert listing is False
+
+    #correct implementation
+    listing = create_listing("New1 2Home", "This is a new nice home", 1000, "2021-01-06", "test0@test.com")
+    assert listing is True
 
 def test_r4_2_create_list():
     '''
     Testing R4-2: The title of the product is no longer than 80 characters.
     '''
-    print (create_listing("X"*81,"This is a new nice home",1000,"2021-01-06","test0@test.com"))
+    #81 character title
+    listing = create_listing("X"*81, "This is a new nice home", 1000, "2021-01-06", "test0@test.com")
+    assert listing is False
 
 def test_r4_3_create_list():
     '''
     Testing R4-3: The description of the product can be arbitrary characters,
                   with a minimum length of 20 characters and a maximum of 2000 characters.
     '''
-    print (create_listing("New Home","This is a new home",1000,"2021-01-06","test0@test.com"))
+    #length of description less than 20
+    listing = create_listing("New Home", "This is a new home", 1000, "2021-01-06", "test0@test.com")
+    assert listing is False
 
 def test_r4_4_create_list():
     '''
     Testing R4-4: Description has to be longer than the product's title.
     '''
-    print (create_listing("New Home","This",1000,"2021-01-06","test0@test.com"))
+    #length of description shorter than length of title
+    listing = create_listing("New Home", "This", 1000, "2021-01-06", "test0@test.com")
+    assert listing is False
 
 def test_r4_5_create_list():
     '''
     Testing R4-5: Price has to be of range [10, 10000].
     '''
-    print (create_listing("New Home","This is a new home",9,"2021-01-06","test0@test.com"))
-    print (create_listing("New Home","This is a new home",20000,"2021-01-06","test0@test.com"))
-    print (create_listing("New Home","This is a new home",1000,"2021-01-06","test0@test.com"))
+    #price too low
+    listing = create_listing("New Home", "This is a new nice home", 9, "2021-01-06", "test0@test.com")
+    assert listing is False
+
+    #price too high
+    listing = create_listing("New Home", "This is a new nice home", 20000, "2021-01-06", "test0@test.com")
+    assert listing is False
 
 def test_r4_6_create_list():
     '''
     Testing R4-6: last_modified_date must be after 2021-01-02 and before 2025-01-02.
     '''
-    print (create_listing("New Home","This is a new home",1000,"2021-01-01","test0@test.com"))
-    print (create_listing("New Home","This is a new home",1000,"2025-01-03","test0@test.com"))
-    print (create_listing("New Home","This is a new home",1000,"2023-11-31","test0@test.com"))
+    #date before valid date
+    listing = create_listing("New Home", "This is a new nice home", 1000, "2021-01-01", "test0@test.com")
+    assert listing is False
+
+    #date after valid date
+    listing = create_listing("New Home", "This is a new nice home", 1000, "2025-01-03", "test0@test.com")
+    assert listing is False
+
+    #date does not exist
+    listing = create_listing("New Home", "This is a new nice home", 1000, "2023-11-31", "test0@test.com")
+    assert listing is False
 
 def test_r4_7_create_list():
     '''
     Testing R4-7: owner_email cannot be empty. The owner of the corresponding product
                   must exist in the database.
     '''
-    print (create_listing("New Home","This is a new home",1000,"2021-01-06"," "))
-    print (create_listing("New Home","This is a new home",1000,"2021-01-06","test15@test.com"))
+    #empty owner email
+    listing = create_listing("New Home", "This is a new nice home", 1000, "2021-01-06", " ")
+    assert listing is False
+
+    #email does not exist in the database
+    listing = create_listing("New Home", "This is a new nice home", 1000, "2021-01-06", "test15@test.com")
+    assert listing is False
 
 def test_r4_8_create_list():
     '''
     Testing R4-8: A user cannot create products that have the same title.
     '''
-    print (create_listing("New1 2Home","This is a new home",1000,"2021-01-06","test0@test.com"))
+    #title already exists in database
+    listing = create_listing("New1 2Home", "This is a new nice home", 1000, "2021-01-06", "test0@test.com")
+    assert listing is False

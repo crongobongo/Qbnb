@@ -45,11 +45,10 @@ class Review(db.Model):
 
 class Listing(db.Model):
     # may need to edit these, eg. not sure about owner_id?
-    id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(), primary_key=True)
     description = db.Column(db.String(), primary_key=True)
-    price = db.Column(db.Integer, unique=True, nullable=False)
-    last_modified_date = db.Column(db.String(), unique=True, nullable=False)
+    price = db.Column(db.Integer, unique=False, nullable=False)
+    last_modified_date = db.Column(db.String(), unique=False, nullable=False)
     owner_id = db.Column(db.String(), primary_key=True)
 
 
@@ -236,7 +235,7 @@ def create_listing(title_product, description_product, price_product, date, user
     
     #check that the description of the product meets the requirements
     if len(description_product) < len(title_product) or len(description_product) < 20 or len(description_product) > 2000:
-        requirements = False
+        return False
 
     if price_product < 10 or price_product > 10000:
         return False
