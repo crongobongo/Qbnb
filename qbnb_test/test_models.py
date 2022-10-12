@@ -1,4 +1,4 @@
-from qbnb.models import login, update_user, db, User, register
+from qbnb.models import login, update_user, db, User, register, create_listing
 # from qbnb.models import register, login
 
 # test users for login
