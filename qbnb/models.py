@@ -314,15 +314,21 @@ def create_listing(title_prod, desc_prod, price_prod, date, user_email):
     
     # if the listing requirements all pass, then add it to the
     # database and return True
-    new_listing = Listing(title=title_prod, description=desc_prod, price=price_prod, last_modified_date=date, owner_id=user_email)
+    new_listing = Listing(title=title_prod, description=desc_prod,
+                          price=price_prod, last_modified_date=date,
+                          owner_id=user_email)
     db.session.add(new_listing)
     db.session.commit()
     return True
 
-# R5-1: One can update all attributes of the listing, except owner_id and last_modified_date.
+
+# R5-1: One can update all attributes of the listing, except
+# owner_id and last_modified_date.
 # R5-2: Price can be only increased but cannot be decreased :)
-# R5-3: last_modified_date should be updated when the update operation is successful.
-# R5-4: When updating an attribute, one has to make sure that it follows the same requirements as above.
+# R5-3: last_modified_date should be updated when the update
+# operation is successful.
+# R5-4: When updating an attribute, one has to make sure that
+# it follows the same requirements as above.
 def update_listing(owner_id, title, description, price):
     '''
     Update user information
@@ -343,24 +349,26 @@ def update_listing(owner_id, title, description, price):
 
     # checks to make sure each attribute is successfull
     
-    #check if the title of the product meets the requirements
+    # check if the title of the product meets the requirements
     if title != "":
         if len(title) <= 80 and title[0] != " " and title[-1] != " ":
-            #go through each word and check that they are only alphanumerics
+            # go through each word and check that they are only alphanumerics
             title_check_regex = title.split(" ")
             for word in title_check_regex:
-                if not re.match(r'^[a-zA-Z0-9]+$',word):
+                if not re.match(r'^[a-zA-Z0-9]+$', word):
                     return None
         else:
             return None
 
-        #make sure the title hasn't been used before
+        # make sure the title hasn't been used before
         title_exists = Listing.query.filter_by(title=title).first()
-        if not(title_exists is None):
+        if not (title_exists is None):
             return None
 
     if description != "":
-        if len(description) < len(title) or len(description) < 20 or len(description) > 2000:
+        if len(description) < len(title):
+            return None
+        elif len(description) < 20 or len(description) > 2000:
             return None
         
         if price < 10 or price > 10000:
@@ -376,7 +384,7 @@ def update_listing(owner_id, title, description, price):
         listing.title = title
     if description != "":
         listing.description = description
-    if price!= -1:
+    if price != -1:
         listing.price = price
     # updates the last_modified_date since all operations were successfull
     listing.last_modified_date = datetime.date.today()
