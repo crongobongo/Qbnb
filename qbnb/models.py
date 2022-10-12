@@ -44,7 +44,6 @@ class Review(db.Model):
 
 class Listing(db.Model):
     # may need to edit these, eg. not sure about owner_id?
-    id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(), primary_key=True)
     description = db.Column(db.String(), primary_key=True)
     price = db.Column(db.Integer, unique=False, nullable=False)
