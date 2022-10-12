@@ -217,7 +217,8 @@ def create_listing(title_product, description_product, price_product, date, user
           and space allowed only if it is not as prefix and suffix.
     R4-2: The title of the product is no longer than 80 characters.
     R4-3: The description of the product can be arbitrary characters,
-          with a minimum length of 20 characters and a maximum of 2000 characters.
+          with a minimum length of 20 characters, 
+          and a maximum of 2000 characters.
     R4-4: Description has to be longer than the product's title.
     R4-5: Price has to be of range [10, 10000].
     R4-6: last_modified_date must be after 2021-01-02 and before 2025-01-02.
@@ -281,7 +282,6 @@ def create_listing(title_product, description_product, price_product, date, user
     
     # if the listing requirements all pass, then add it to the
     # database and return True
-    db.session.add(Listing(title=title_product, description=description_product,
-    price=price_product, last_modified_date=date, owner_id=user_email))
+    db.session.add(Listing(title=title_product, description=description_product, price=price_product, last_modified_date=date, owner_id=user_email))
     db.session.commit()
     return True
