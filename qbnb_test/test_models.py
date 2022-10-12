@@ -199,6 +199,7 @@ def test_r4_1_create_list():
     listing = create_listing("New1 2Home", "This is a new nice home", 1000, "2021-01-06", "test0@test.com")
     assert listing is True
 
+
 def test_r4_2_create_list():
     '''
     Testing R4-2: The title of the product is no longer than 80 characters.
@@ -206,6 +207,7 @@ def test_r4_2_create_list():
     # 81 character title
     listing = create_listing("X" * 81, "This is a new nice home", 1000, "2021-01-06", "test0@test.com")
     assert listing is False
+
 
 def test_r4_3_create_list():
     '''
@@ -216,6 +218,7 @@ def test_r4_3_create_list():
     listing = create_listing("New Home", "This is a new home", 1000, "2021-01-06", "test0@test.com")
     assert listing is False
 
+
 def test_r4_4_create_list():
     '''
     Testing R4-4: Description has to be longer than the product's title.
@@ -223,6 +226,7 @@ def test_r4_4_create_list():
     # length of description shorter than length of title
     listing = create_listing("New Home", "This", 1000, "2021-01-06", "test0@test.com")
     assert listing is False
+
 
 def test_r4_5_create_list():
     '''
@@ -235,6 +239,7 @@ def test_r4_5_create_list():
     # price too high
     listing = create_listing("New Home", "This is a new nice home", 20000, "2021-01-06", "test0@test.com")
     assert listing is False
+
 
 def test_r4_6_create_list():
     '''
@@ -252,6 +257,7 @@ def test_r4_6_create_list():
     listing = create_listing("New Home", "This is a new nice home", 1000, "2023-11-31", "test0@test.com")
     assert listing is False
 
+
 def test_r4_7_create_list():
     '''
     Testing R4-7: owner_email cannot be empty. The owner of the corresponding product
@@ -264,6 +270,7 @@ def test_r4_7_create_list():
     # email does not exist in the database
     listing = create_listing("New Home", "This is a new nice home", 1000, "2021-01-06", "test15@test.com")
     assert listing is False
+
 
 def test_r4_8_create_list():
     '''
