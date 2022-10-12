@@ -203,7 +203,7 @@ def test_r4_2_create_list():
     Testing R4-2: The title of the product is no longer than 80 characters.
     '''
     # 81 character title
-    listing = create_listing("X"*81, "This is a new nice home", 1000, "2021-01-06", "test0@test.com")
+    listing = create_listing("X" * 81, "This is a new nice home", 1000, "2021-01-06", "test0@test.com")
     assert listing is False
 
 def test_r4_3_create_list():
