@@ -1,4 +1,5 @@
-from qbnb.models import login, update_user, db, User, register
+from qbnb.models import create_listing, login, update_user, db, User
+
 # from qbnb.models import register, login
 
 # test users for login
@@ -282,3 +283,134 @@ def test_r3_4_update():
     # revert to old username for testing purposes
     # user = update_user('test0@test.com', "user0", "", "", "A1A1A1")
 
+
+def test_r4_1_create_list():
+    '''
+    Testing R4-1: Title of the product has to be alphanumeric-only,
+                  and space allowed only if it is not as prefix and suffix. 
+    '''
+    description = "This is a new nice home"
+    date = "2021-01-06"
+    email = "test0@test.com"
+
+    # leading space in title
+    listing = create_listing(" New Home", description, 1000, date, email)
+    assert listing is False
+
+    # trailing space in title
+    listing = create_listing("New Home ", description, 1000, date, email)
+    assert listing is False
+
+    # correct implementation
+    listing = create_listing("New1 2Home", description, 1000, date, email)
+    assert listing is True
+
+
+def test_r4_2_create_list():
+    '''
+    Testing R4-2: The title of the product is no longer than 80 characters.
+    '''
+    description = "This is a new home"
+    date = "2021-01-06"
+    email = "test0@test.com"
+
+    # 81 character title
+    listing = create_listing("X" * 81, description, 1000, date, email)
+    assert listing is False
+
+
+def test_r4_3_create_list():
+    '''
+    Testing R4-3: The description of the product can be arbitrary characters,
+                  with a minimum length of 20 characters and a maximum of
+                  2000 characters.
+    '''
+    description = "This is a new home"
+    date = "2021-01-06"
+    email = "test0@test.com"
+
+    # length of description less than 20
+    listing = create_listing("New Home", description, 1000, date, email)
+    assert listing is False
+
+
+def test_r4_4_create_list():
+    '''
+    Testing R4-4: Description has to be longer than the product's title.
+    '''
+    date = "2021-01-06"
+    email = "test0@test.com"
+
+    # length of description shorter than length of title
+    listing = create_listing("New Home", "This", 1000, date, email)
+    assert listing is False
+
+
+def test_r4_5_create_list():
+    '''
+    Testing R4-5: Price has to be of range [10, 10000].
+    '''
+    description = "This is a new nice home"
+    date = "2021-01-06"
+    email = "test0@test.com"
+
+    # price too low
+    listing = create_listing("New Home", description, 9, date, email)
+    assert listing is False
+
+    # price too high
+    listing = create_listing("New Home", description, 20000, date, email)
+    assert listing is False
+
+
+def test_r4_6_create_list():
+    '''
+    Testing R4-6: last_modified_date must be after 2021-01-02
+                  and before 2025-01-02.
+    '''
+    description = "This is a new nice home"
+    date1 = "2021-01-01"
+    date2 = "2025-01-03"
+    date3 = "2023-11-31"
+    email = "test0@test.com"
+
+    # date before valid date
+    listing = create_listing("New Home", description, 1000, date1, email)
+    assert listing is False
+
+    # date after valid date
+    listing = create_listing("New Home", description, 1000, date2, email)
+    assert listing is False
+
+    # date does not exist
+    listing = create_listing("New Home", description, 1000, date3, email)
+    assert listing is False
+
+
+def test_r4_7_create_list():
+    '''
+    Testing R4-7: owner_email cannot be empty. The owner of the corresponding
+                  product must exist in the database.
+    '''
+    # empty owner email
+    description = "This is a new nice home"
+    date = "2021-01-06"
+    email = "test15@test.com"
+    listing = create_listing("New1 2Home", description, 1000, date, " ")
+    assert listing is False
+
+    # email does not exist in the database
+    listing = create_listing("New1 2Home", description, 1000, date, email)
+    assert listing is False
+
+
+def test_r4_8_create_list():
+    '''
+    Testing R4-8: A user cannot create products that have the same title.
+    '''
+    # title already exists in database
+    description = "This is a new nice home"
+    date = "2021-01-06"
+    email = "test0@test.com"
+    listing1 = create_listing("New1 2Home", description, 1000, date, email)
+    assert listing1 is False
