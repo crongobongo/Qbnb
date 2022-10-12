@@ -1,4 +1,4 @@
-from qbnb.models import login, update_user, db, User
+from qbnb.models import create_listing, login, update_user, db, User
 # from qbnb.models import register, login
 
 
@@ -180,3 +180,61 @@ def test_r3_4_update():
     assert user is None
     # revert to old username for testing purposes
     # user = update_user('test0@test.com', "user0", "", "", "A1A1A1")
+
+def test_r4_1_create_list():
+    '''
+    Testing R4-1: Title of the product has to be alphanumeric-only,
+                  and space allowed only if it is not as prefix and suffix. 
+    '''
+    print (create_listing(" New Home","This is a new nice home",1000,"2021-01-06","test0@test.com"))
+    print (create_listing("New1 2Home ","This is a new nice home",1000,"2021-01-06","test0@test.com"))
+    print (create_listing("New1 2Home","This is a new nice home",1000,"2021-01-06","test0@test.com"))
+
+def test_r4_2_create_list():
+    '''
+    Testing R4-2: The title of the product is no longer than 80 characters.
+    '''
+    print (create_listing("X"*81,"This is a new nice home",1000,"2021-01-06","test0@test.com"))
+
+def test_r4_3_create_list():
+    '''
+    Testing R4-3: The description of the product can be arbitrary characters,
+                  with a minimum length of 20 characters and a maximum of 2000 characters.
+    '''
+    print (create_listing("New Home","This is a new home",1000,"2021-01-06","test0@test.com"))
+
+def test_r4_4_create_list():
+    '''
+    Testing R4-4: Description has to be longer than the product's title.
+    '''
+    print (create_listing("New Home","This",1000,"2021-01-06","test0@test.com"))
+
+def test_r4_5_create_list():
+    '''
+    Testing R4-5: Price has to be of range [10, 10000].
+    '''
+    print (create_listing("New Home","This is a new home",9,"2021-01-06","test0@test.com"))
+    print (create_listing("New Home","This is a new home",20000,"2021-01-06","test0@test.com"))
+    print (create_listing("New Home","This is a new home",1000,"2021-01-06","test0@test.com"))
+
+def test_r4_6_create_list():
+    '''
+    Testing R4-6: last_modified_date must be after 2021-01-02 and before 2025-01-02.
+    '''
+    print (create_listing("New Home","This is a new home",1000,"2021-01-01","test0@test.com"))
+    print (create_listing("New Home","This is a new home",1000,"2025-01-03","test0@test.com"))
+    print (create_listing("New Home","This is a new home",1000,"2023-11-31","test0@test.com"))
+
+def test_r4_7_create_list():
+    '''
+    Testing R4-7: owner_email cannot be empty. The owner of the corresponding product
+                  must exist in the database.
+    '''
+    print (create_listing("New Home","This is a new home",1000,"2021-01-06"," "))
+    print (create_listing("New Home","This is a new home",1000,"2021-01-06","test15@test.com"))
+
+def test_r4_8_create_list():
+    '''
+    Testing R4-8: A user cannot create products that have the same title.
+    '''
+    print (create_listing("New1 2Home","This is a new home",1000,"2021-01-06","test0@test.com"))
