@@ -1,6 +1,5 @@
 from qbnb.models import create_listing, login, update_user, db, User
-
-# from qbnb.models import register, login
+from qbnb.models import register, update_listing, datetime
 
 # test users for login
 db.session.add(User(email="test0@test.com", password="123aB!", 
@@ -414,3 +413,68 @@ def test_r4_8_create_list():
     email = "test0@test.com"
     listing1 = create_listing("New1 2Home", description, 1000, date, email)
     assert listing1 is False
+
+
+def test_r5_1_update_listing():
+    '''
+    Testing R5-1: One can update all attributes of the listing,
+    except owner_id and last_modified_date.
+    '''
+    create_listing("New1 2Home", "This is a new nice home", 1000,
+                   "2021-01-06", "test0@test.com")
+    listing = update_listing("test0@test.com", "New1 3Home",
+                             "This is a not nice home", 1001)
+    # Shows that the listing is created
+    assert listing is not None
+    # Shows that the owner id is not changed
+    assert listing.owner_id == "test0@test.com"
+    # Shows that the title is updated
+    assert listing.title == "New1 3Home"
+    # Shows that the description is updated
+    assert listing.description == "This is a not nice home"
+    assert listing.price == 1001
+    # Shows that the price is updated
+
+
+def test_r5_2_update_listing():
+    '''
+    Testing R5-2: Price can be only increased but cannot be decreased :).
+    '''
+    create_listing("New1 2Home", "This is a new nice home", 1000,
+                   "2021-01-06", "test0@test.com")
+    listing = update_listing("test0@test.com", "", "", 2000)
+    # Shows that the listing is created if the price updates to a higher value
+    assert listing is not None
+    # Shows that the listing is None if it is a lower value
+    listing = update_listing("test0@test.com", "", "", 1999)
+    assert listing is None
+
+
+def test_r5_3_update_listing():
+    '''
+    Testing R5-3: last_modified_date should be updated when the
+    update operation is successful.
+    '''
+    create_listing("New1 2Home", "This is a new nice home", 1000,
+                   "2021-01-06", "test0@test.com")
+    listing = update_listing("test0@test.com", "", "", 2000)
+    # Shows that the listing is None if it is a lower value
+    assert listing.last_modified_date == datetime.date.today()
+
+
+def test_r5_4_update_listing():
+    '''
+    R5-4: When updating an attribute, one has to make sure
+    that it follows the same requirements as above.
+    '''
+    create_listing("New1 2Home", "This is a new nice home",
+                   1000, "2021-01-06", "test0@test.com")
+    # Tests the title
+    listing = update_listing("test0@test.com", "./csa.", "", -1)
+    assert listing is None
+    # Tests the description
+    listing = update_listing("test0@test.com", "", "ha.", -1)
+    assert listing is None
+    # Tests the price
+    listing = update_listing("test0@test.com", "", "", 3)
+    assert listing is None
