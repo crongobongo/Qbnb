@@ -311,4 +311,6 @@ def test_r4_8_create_list():
     date = "2021-01-06"
     email = "test0@test.com"
     listing = create_listing("New1 2Home", description, 1000, date, email)
+    assert listing is True
+    listing1 = create_listing("New1 2Home", description, 1000, date, email)
     assert listing is False
