@@ -47,8 +47,8 @@ class Listing(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(), primary_key=True)
     description = db.Column(db.String(), primary_key=True)
-    price = db.Column(db.Integer, unique=True, nullable=False)
-    last_modified_date = db.Column(db.String(), unique=True, nullable=False)
+    price = db.Column(db.Integer, unique=False, nullable=False)
+    last_modified_date = db.Column(db.String(), unique=False, nullable=False)
     owner_id = db.Column(db.String(), primary_key=True)
 
 
@@ -313,7 +313,6 @@ def create_listing(title_prod, desc_prod, price_prod, date, user_email):
     
     # if the listing requirements all pass, then add it to the
     # database and return True
-    new_listing = Listing(title=title_prod, description=desc_prod, price=price_prod, last_modified_date=date, owner_id=user_email)
-    db.session.add(new_listing)
+    db.session.add(Listing(title=title_prod, description=desc_prod, price=price_prod, last_modified_date=date, owner_id=user_email))
     db.session.commit()
     return True
