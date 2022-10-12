@@ -1,6 +1,5 @@
 from qbnb.models import create_listing, login, update_user, db, User
-
-# from qbnb.models import register, login
+from qbnb.models import register
 
 # test users for login
 db.session.add(User(email="test0@test.com", password="123aB!", 
