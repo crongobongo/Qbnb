@@ -223,9 +223,9 @@ R4-8: A user cannot create products that have the same title.
 '''
 def create_listing(title_product, description_product, price_product, date, user_email):
 
-    #check if the title of the product meets the requirements
+    # check if the title of the product meets the requirements
     if len(title_product) <= 80 and title_product[0] != " " and title_product[-1] != " ":
-        #go through each word and check that they are only alphanumerics
+        # go through each word and check that they are only alphanumerics
         title_check_regex = title_product.split(" ")
         for word in title_check_regex:
             if not re.match(r'^[a-zA-Z0-9]+$',word):
@@ -233,19 +233,19 @@ def create_listing(title_product, description_product, price_product, date, user
     else:
         return False
     
-    #check that the description of the product meets the requirements
+    # check that the description of the product meets the requirements
     if len(description_product) < len(title_product) or len(description_product) < 20 or len(description_product) > 2000:
         return False
 
     if price_product < 10 or price_product > 10000:
         return False
 
-    #Year-Month-Date check if valid
+    # Year-Month-Date check if valid
     try:
-        #check that the date exists in the calender
+        # check that the date exists in the calender
         datetime.datetime.strptime(date, '%Y-%m-%d')
 
-        #check that the year is between 2021 and 2025, if so check that its valid
+        # check that the year is between 2021 and 2025, if so check that its valid
         if int(date[:4]) >= 2021 and int(date[:4]) <= 2025:
             if date[:4] == "2021" and date[5:7] == "01":
                 if date[8:10] == "01":
@@ -259,20 +259,20 @@ def create_listing(title_product, description_product, price_product, date, user
     except ValueError:
         return False
 
-    #check owner id
+    # check owner id
     user = User.query.filter_by(email=user_email).first()
     title_exists = Listing.query.filter_by(title=title_product).first()
 
-    #check that the email isn't empty or does not exist in the database
+    # check that the email isn't empty or does not exist in the database
     if user_email == " ":
         return False
     if user is None:
         return False
-    #make sure the title hasn't been used before
+    # make sure the title hasn't been used before
     if not(title_exists is None):
         return False
     
-    #if the listing requirements all pass, then add it to the database and return True
-    db.session.add(Listing(title=title_product,description=description_product,price=price_product,last_modified_date=date,owner_id=user_email))
+    # if the listing requirements all pass, then add it to the database and return True
+    db.session.add(Listing(title=title_product, description=description_product, price=price_product, last_modified_date=date, owner_id=user_email))
     db.session.commit()
     return True
