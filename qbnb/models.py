@@ -1,7 +1,9 @@
+from http.client import REQUEST_HEADER_FIELDS_TOO_LARGE
 from qbnb import app
 from flask_sqlalchemy import SQLAlchemy
 import re
 import email
+import datetime
 
 '''
 This file defines data models and related business logics
@@ -15,8 +17,8 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(), unique=True, nullable=False)
     password = db.Column(db.String(), nullable=False)
-    username = db.Column(db.String(), unique=True, nullable=False)
-    billing_address = db.Column(db.String(), unique=True, nullable=False)
+    username = db.Column(db.String(), unique=False, nullable=False)
+    billing_address = db.Column(db.String(), unique=False, nullable=False)
     postal_code = db.Column(db.String(), nullable=False)
     balance = db.Column(db.Integer(), nullable=False)
 
@@ -43,11 +45,10 @@ class Review(db.Model):
 
 class Listing(db.Model):
     # may need to edit these, eg. not sure about owner_id?
-    id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(), primary_key=True)
     description = db.Column(db.String(), primary_key=True)
-    price = db.Column(db.Integer, unique=True, nullable=False)
-    last_modified_date = db.Column(db.String(), unique=True, nullable=False)
+    price = db.Column(db.Integer, unique=False, nullable=False)
+    last_modified_date = db.Column(db.String(), unique=False, nullable=False)
     owner_id = db.Column(db.String(), primary_key=True)
 
 
@@ -82,29 +83,59 @@ db.create_all()
 # db.create_all()
 
 
-# def register(name, email, password):
-#     '''
-#     Register a new user
-#       Parameters:
-#         name (string):     user name
-#         email (string):    user email
-#         password (string): user password
-#       Returns:
-#         True if registration succeeded otherwise False
-#     '''
-#     # check if the email has been used:
-#     existed = User.query.filter_by(email=email).all()
-#     if len(existed) > 0:
-#         return False
+def register(name, email, password):
+    # check that neither password or user is empty
+    if (password is None) or (email is None):
+        return False
 
-#     # create a new user
-#     user = User(username=name, email=email, password=password)
-#     # add it to the current database session
-#     db.session.add(user)
-#     # actually save the user object
-#     db.session.commit()
+    # check that email is valid
+    email_regex = re.compile(r"([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]\
+    +)*|\"([]!#-[^-~ \t]|(\\[\t -~]))+\")@([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+\
+    /-9=?A-Z^-~]+)*|\[[\t -Z^-~]*])")
 
-#     return True
+    if not re.match(email_regex, email):
+        return False
+    
+    # check password is valid
+    password_regex = re.compile(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*[-+_\
+    !@#$%^&*., ?])\S{6,}$")
+    if not re.match(password_regex, password):
+        return False
+
+    # check username is valid
+    valid_name = True
+    user_list = list(name)
+    if ((len(name) <= 2) or (len(name) >= 20)):
+        return False
+
+    for i in range(len(user_list)):
+        if (i == 0) or (i == len(user_list) - 1):
+            if (user_list[i].isalnum() is False):
+                valid_name = False
+        else:
+            if (user_list[i].isalnum() is not True) and (user_list[i] != ' '):
+                valid_name = False
+
+    if valid_name is False:
+        return False
+
+    # check if the email has been used:
+    existed = User.query.filter_by(email=email).all()
+    if len(existed) > 0:
+        return False
+
+    # create a new user 
+    # shipping address is empty, postal code is empty, balance = 100
+     
+    user = User(username=name, email=email, password=password, 
+                billing_address='', postal_code='', balance=100)
+    # add it to the current database session
+    db.session.add(user)
+    # actually save the user object
+    db.session.commit()
+
+    return True
+
 
 # email = db.Column(db.String(), unique=True, nullable=False)
 #     password = db.Column(db.String(), nullable=False)
@@ -209,3 +240,152 @@ def update_user(old_email, username, new_email, billing_address, postal_code):
         return None
     return user
 
+
+def create_listing(title_prod, desc_prod, price_prod, date, user_email):
+    '''
+    R4-1: The title of the product has to be alphanumeric-only,
+          and space allowed only if it is not as prefix and suffix.
+    R4-2: The title of the product is no longer than 80 characters.
+    R4-3: The description of the product can be arbitrary characters,
+          with a minimum length of 20 characters, 
+          and a maximum of 2000 characters.
+    R4-4: Description has to be longer than the product's title.
+    R4-5: Price has to be of range [10, 10000].
+    R4-6: last_modified_date must be after 2021-01-02 and before 2025-01-02.
+    R4-7: owner_email cannot be empty. The owner of the corresponding product
+          must exist in the database.
+    R4-8: A user cannot create products that have the same title.
+    '''
+    # check if the title of the product meets the requirements
+    if len(title_prod) <= 80:
+        if title_prod[0] != " " and title_prod[-1] != " ":
+            # go through each word and check that they are only alphanumerics
+            title_check_regex = title_prod.split(" ")
+            for word in title_check_regex:
+                if not re.match(r'^[a-zA-Z0-9]+$', word):
+                    return False
+        else:
+            return False
+    else:
+        return False
+    
+    # check that the description of the product meets the requirements
+    if len(desc_prod) < len(title_prod):
+        return False
+    elif len(desc_prod) < 20 or len(desc_prod) > 2000:
+        return False
+
+    # price should be in range [10:10000]    
+    if price_prod < 10 or price_prod > 10000:
+        return False
+
+    # Year-Month-Date check if valid
+    try:
+        # check that the date exists in the calender
+        datetime.datetime.strptime(date, '%Y-%m-%d')
+
+        # check that the year is between 2021 and 2025,
+        # if so check that its valid
+        if int(date[:4]) >= 2021 and int(date[:4]) <= 2025:
+            if date[:4] == "2021" and date[5:7] == "01":
+                if date[8:10] == "01":
+                    return False
+
+            elif date[:4] == "2025" and date[5:7] == "01":
+                if date[8:10] != "01" or date[8:10] != "02":
+                    return False                 
+        else:
+            return False
+    except ValueError:
+        return False
+
+    # check owner id
+    user = User.query.filter_by(email=user_email).first()
+    title_exists = Listing.query.filter_by(title=title_prod).first()
+
+    # check that the email isn't empty or does not exist in the database
+    if user_email == " ":
+        return False
+    if user is None:
+        return False
+    # make sure the title hasn't been used before
+    if not (title_exists is None):
+        return False
+    
+    # if the listing requirements all pass, then add it to the
+    # database and return True
+    new_listing = Listing(title=title_prod, description=desc_prod,
+                          price=price_prod, last_modified_date=date,
+                          owner_id=user_email)
+    db.session.add(new_listing)
+    db.session.commit()
+    return True
+
+
+# R5-1: One can update all attributes of the listing, except
+# owner_id and last_modified_date.
+# R5-2: Price can be only increased but cannot be decreased :)
+# R5-3: last_modified_date should be updated when the update
+# operation is successful.
+# R5-4: When updating an attribute, one has to make sure that
+# it follows the same requirements as above.
+def update_listing(owner_id, title, description, price):
+    '''
+    Update user information
+      Parameters:
+        owner_id (string): owner's id
+        title (string): to update owner's title
+        desciption (string): to update owner's description
+        price (intger): to update owner's price,
+            set to -1 if not to be updated
+        last_modified date (string): to update owner's last_modified_date
+      Returns:
+        The listing object if update succeeded otherwise None
+    '''
+    # checks to make sure listing to be updated is a valid listing
+    listing = Listing.query.filter_by(owner_id=owner_id).first()
+    if listing is None:
+        return None
+
+    # checks to make sure each attribute is successfull
+    
+    # check if the title of the product meets the requirements
+    if title != "":
+        if len(title) <= 80 and title[0] != " " and title[-1] != " ":
+            # go through each word and check that they are only alphanumerics
+            title_check_regex = title.split(" ")
+            for word in title_check_regex:
+                if not re.match(r'^[a-zA-Z0-9]+$', word):
+                    return None
+        else:
+            return None
+
+        # make sure the title hasn't been used before
+        title_exists = Listing.query.filter_by(title=title).first()
+        if not (title_exists is None):
+            return None
+
+    if description != "":
+        if len(description) < len(title):
+            return None
+        elif len(description) < 20 or len(description) > 2000:
+            return None
+        
+        if price < 10 or price > 10000:
+            return None
+
+    if price != -1:
+        # checks to make sure that price can only be increased  
+        if price < listing.price:
+            return None
+
+    # updates the attributes of listing
+    if title != "":
+        listing.title = title
+    if description != "":
+        listing.description = description
+    if price != -1:
+        listing.price = price
+    # updates the last_modified_date since all operations were successfull
+    listing.last_modified_date = datetime.date.today()
+    return listing
