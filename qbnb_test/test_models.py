@@ -1,17 +1,7 @@
-from qbnb.models import login, update_user, db, User
-# from qbnb.models import register, login
+from qbnb.models import create_listing, login, update_user, db, User
+from qbnb.models import register, update_listing, datetime
 
-
-# def test_r1_7_user_register():
-#     '''
-#     Testing R1-7: If the email has been used, the operation failed.
-#     '''
-
-#     assert register('user0', 'test0@test.com', '123aB!') is True
-#     assert register('user0', 'test1@test.com', '456ZxY?') is True
-#     assert register('user1', 'test0@test.com', '123456') is False
-
-# test users for login because i dont have register function
+# test users for login
 db.session.add(User(email="test0@test.com", password="123aB!", 
                     username="user0", billing_address="000", 
                     postal_code="", balance="000"))
@@ -19,6 +9,117 @@ db.session.add(User(email="test1@test.com", password="456ZxY?",
                     username="user1", billing_address="111", 
                     postal_code="", balance="000"))
 db.session.commit()
+
+
+def test_r1_1_user_register():
+    '''
+    Testing R1-1: Email cannot be empty. password cannot be empty
+    '''
+
+    assert register('userr11a', 'testr11a@test.com', '!2ASDa') is True
+    assert register('userr11b', '', '!2ASDa') is False
+    assert register('userr11c', 'testr11b@test.com', '') is False
+    assert register('userr11d', '', '') is False
+
+
+def test_r1_2_user_register():
+    '''
+    Testing R1-2: A user is uniquely identified 
+    by his/her user id - automatically generated.
+    '''
+
+    register('userr12a', "testr12a@test.com", "!$weAr14")
+    register('userr12b', "testr12b@test.com", "!$weAr14")
+    
+    user_one = User.query.filter_by(email="testr12a@test.com").first()
+    user_two = User.query.filter_by(email="testr12b@test.com").first()
+    
+    assert (user_one.id == user_two.id) is False
+
+    
+def test_r1_3_user_register():
+    '''
+    Testing R1-3: The email has to follow addr-spec defined in RFC 5322
+    '''
+
+    assert register('userr13a', 'testr13acom', "AaBc!23") is False
+
+
+def test_r1_4_user_register():
+    '''
+    Testing R1-4: Password has to meet the required
+     complexity: minimum length 6, 
+    at least one upper case, at least one lower case, 
+    and at least one special character.
+    '''
+
+    assert register('userr14a', 'testr14a@test.com', '!2Aa') is False
+    assert register('user14b', 'testr14b@test.com', 'hello123') is False
+    assert register('user14c', 'testr14c@test.com', 'ASD123!!!') is False
+    assert register('userr14d', 'testr14d@test.com', '123ASDads') is False
+
+
+def test_r1_5_user_register():
+    '''
+    Testing R1-5: User name has to be non-empty, alphanumeric-only,
+    and space allowed only if it is not as the prefix or suffix.
+    '''
+
+    assert register("", 'testr15a@test.com', '123!asdA') is False
+    assert register('aasd@@@', 'testr15b@test.com', '123!asdA') is False
+    assert register(' Hello', 'testr15c@test.com', '123!asdA') is False
+
+
+def test_r1_6_user_register():
+    '''
+    Testing R1-6:  User name has to be longer than 2 
+    characters and less than 20 characters.
+    '''
+
+    assert register('aa', "testr16a@test.com", "123!asdA") is False
+    assert register('aaaaaAAAAAbbbbbBBBBBc', 
+                    "testr16b@test.com", "123!asdA") is False
+
+
+def test_r1_7_user_register():
+    '''
+    Testing R1-7: If the email has been used, the operation failed.
+    '''
+
+    assert register('userr17a', 'testr17a@test.com', '123aB!') is True
+    assert register('userr17b', 'testr17b@test.com', '456ZxY?') is True
+    assert register('userr17c', 'testr17a@test.com', '12Aac>56') is False
+
+
+def test_r1_8_user_register():
+    '''
+    Testing R1-8: Shipping address is empty at the time of registration.
+    '''
+
+    register('userr18', "testr18@test.com", "!$weAr14")
+    user = User.query.filter_by(email="testr18@test.com").first()
+    assert (user.billing_address == '') is True
+
+
+def test_r1_9_user_register():
+    '''
+    Testing R1-9: Postal is empty at the time of registration.
+    '''
+
+    register('userr19', "testr19@test.com", "!$weAr14")
+    user = User.query.filter_by(email="testr19@test.com").first()
+    assert (user.postal_code == '') is True
+
+
+def test_r1_10_user_register():
+    '''
+    Testing R1-10: Balance should be initialized as 
+    100 at the time of registration. q
+    '''
+
+    register('userr110', "testr110@test.com", "!$weAr14")
+    user = User.query.filter_by(email="testr110@test.com").first()
+    assert (user.balance == 100) is True
 
 
 def test_r2_1_login():
@@ -180,3 +281,200 @@ def test_r3_4_update():
     assert user is None
     # revert to old username for testing purposes
     # user = update_user('test0@test.com', "user0", "", "", "A1A1A1")
+
+
+def test_r4_1_create_list():
+    '''
+    Testing R4-1: Title of the product has to be alphanumeric-only,
+                  and space allowed only if it is not as prefix and suffix. 
+    '''
+    description = "This is a new nice home"
+    date = "2021-01-06"
+    email = "test0@test.com"
+
+    # leading space in title
+    listing = create_listing(" New Home", description, 1000, date, email)
+    assert listing is False
+
+    # trailing space in title
+    listing = create_listing("New Home ", description, 1000, date, email)
+    assert listing is False
+
+    # correct implementation
+    listing = create_listing("New1 2Home", description, 1000, date, email)
+    assert listing is True
+
+
+def test_r4_2_create_list():
+    '''
+    Testing R4-2: The title of the product is no longer than 80 characters.
+    '''
+    description = "This is a new home"
+    date = "2021-01-06"
+    email = "test0@test.com"
+
+    # 81 character title
+    listing = create_listing("X" * 81, description, 1000, date, email)
+    assert listing is False
+
+
+def test_r4_3_create_list():
+    '''
+    Testing R4-3: The description of the product can be arbitrary characters,
+                  with a minimum length of 20 characters and a maximum of
+                  2000 characters.
+    '''
+    description = "This is a new home"
+    date = "2021-01-06"
+    email = "test0@test.com"
+
+    # length of description less than 20
+    listing = create_listing("New Home", description, 1000, date, email)
+    assert listing is False
+
+
+def test_r4_4_create_list():
+    '''
+    Testing R4-4: Description has to be longer than the product's title.
+    '''
+    date = "2021-01-06"
+    email = "test0@test.com"
+
+    # length of description shorter than length of title
+    listing = create_listing("New Home", "This", 1000, date, email)
+    assert listing is False
+
+
+def test_r4_5_create_list():
+    '''
+    Testing R4-5: Price has to be of range [10, 10000].
+    '''
+    description = "This is a new nice home"
+    date = "2021-01-06"
+    email = "test0@test.com"
+
+    # price too low
+    listing = create_listing("New Home", description, 9, date, email)
+    assert listing is False
+
+    # price too high
+    listing = create_listing("New Home", description, 20000, date, email)
+    assert listing is False
+
+
+def test_r4_6_create_list():
+    '''
+    Testing R4-6: last_modified_date must be after 2021-01-02
+                  and before 2025-01-02.
+    '''
+    description = "This is a new nice home"
+    date1 = "2021-01-01"
+    date2 = "2025-01-03"
+    date3 = "2023-11-31"
+    email = "test0@test.com"
+
+    # date before valid date
+    listing = create_listing("New Home", description, 1000, date1, email)
+    assert listing is False
+
+    # date after valid date
+    listing = create_listing("New Home", description, 1000, date2, email)
+    assert listing is False
+
+    # date does not exist
+    listing = create_listing("New Home", description, 1000, date3, email)
+    assert listing is False
+
+
+def test_r4_7_create_list():
+    '''
+    Testing R4-7: owner_email cannot be empty. The owner of the corresponding
+                  product must exist in the database.
+    '''
+    # empty owner email
+    description = "This is a new nice home"
+    date = "2021-01-06"
+    email = "test15@test.com"
+    listing = create_listing("New1 2Home", description, 1000, date, " ")
+    assert listing is False
+
+    # email does not exist in the database
+    listing = create_listing("New1 2Home", description, 1000, date, email)
+    assert listing is False
+
+
+def test_r4_8_create_list():
+    '''
+    Testing R4-8: A user cannot create products that have the same title.
+    '''
+    # title already exists in database
+    description = "This is a new nice home"
+    date = "2021-01-06"
+    email = "test0@test.com"
+    listing1 = create_listing("New1 2Home", description, 1000, date, email)
+    assert listing1 is False
+
+
+def test_r5_1_update_listing():
+    '''
+    Testing R5-1: One can update all attributes of the listing,
+    except owner_id and last_modified_date.
+    '''
+    create_listing("New1 2Home", "This is a new nice home", 1000,
+                   "2021-01-06", "test0@test.com")
+    listing = update_listing("test0@test.com", "New1 3Home",
+                             "This is a not nice home", 1001)
+    # Shows that the listing is created
+    assert listing is not None
+    # Shows that the owner id is not changed
+    assert listing.owner_id == "test0@test.com"
+    # Shows that the title is updated
+    assert listing.title == "New1 3Home"
+    # Shows that the description is updated
+    assert listing.description == "This is a not nice home"
+    assert listing.price == 1001
+    # Shows that the price is updated
+
+
+def test_r5_2_update_listing():
+    '''
+    Testing R5-2: Price can be only increased but cannot be decreased :).
+    '''
+    create_listing("New1 2Home", "This is a new nice home", 1000,
+                   "2021-01-06", "test0@test.com")
+    listing = update_listing("test0@test.com", "", "", 2000)
+    # Shows that the listing is created if the price updates to a higher value
+    assert listing is not None
+    # Shows that the listing is None if it is a lower value
+    listing = update_listing("test0@test.com", "", "", 1999)
+    assert listing is None
+
+
+def test_r5_3_update_listing():
+    '''
+    Testing R5-3: last_modified_date should be updated when the
+    update operation is successful.
+    '''
+    create_listing("New1 2Home", "This is a new nice home", 1000,
+                   "2021-01-06", "test0@test.com")
+    listing = update_listing("test0@test.com", "", "", 2000)
+    # Shows that the listing is None if it is a lower value
+    assert listing.last_modified_date == datetime.date.today()
+
+
+def test_r5_4_update_listing():
+    '''
+    R5-4: When updating an attribute, one has to make sure
+    that it follows the same requirements as above.
+    '''
+    create_listing("New1 2Home", "This is a new nice home",
+                   1000, "2021-01-06", "test0@test.com")
+    # Tests the title
+    listing = update_listing("test0@test.com", "./csa.", "", -1)
+    assert listing is None
+    # Tests the description
+    listing = update_listing("test0@test.com", "", "ha.", -1)
+    assert listing is None
+    # Tests the price
+    listing = update_listing("test0@test.com", "", "", 3)
+    assert listing is None
