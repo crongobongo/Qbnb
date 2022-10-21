@@ -1,5 +1,6 @@
+import email
 from flask import render_template, request, session, redirect
-from qbnb.models import login, User, register
+from qbnb.models import login, User, register, create_listing
 
 
 from qbnb import app
@@ -126,6 +127,38 @@ def listing_creation_get():
     # templates are stored in the templates folder
     return render_template('create_listing.html', message='Create Listing')
 
+
+@app.route('/create_listing', methods=['POST'])
+def listing_creation_post():
+    title = request.form.get('title')
+    description = request.form.get('description')
+    price_get = request.form.get('price')
+    last_modified_date = request.form.get('last_modified_date')
+    email = request.form.get('email')
+    error_message = None
+
+    try:
+        int(price_get)
+
+    except ValueError:
+        error_message = "Please enter an integer for price."
+        return render_template('create_listing.html', message=error_message)
+        
+    price = int(price_get)
+    # use backend api to register the user
+    success = create_listing(title, description, 
+                             price, last_modified_date, email)
+
+    if not success:
+        error_message = "Listing Creation Failed."
+    # if there is any error messages when registering new user
+    # at the backend, go back to the register page.
+    if error_message:
+        return render_template('create_listing.html', message=error_message)
+    else:
+        return render_template('create_listing.html', 
+                               message="Listing Created.")
+ 
 
 @app.route('/update_listing', methods=['GET'])
 def listing_update_get():

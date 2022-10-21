@@ -7,6 +7,23 @@
 {% block content %}
 <h2 id="create-listing-header">{{ message }}</h2>
 
+<form method="post">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input class="form-control" name="title" id="title" required>
+      <label for="description">Description</label>
+      <input class="form-control" name="description" id="description" required>
+      <label for="price">Price</label>
+      <input class="form-control" name="price" id="price" required>
+      <label for="last_modified_date">Date</label>
+      <input class="form-control" name="last_modified_date" id="last_modified_date" required>
+      <label for="email">Email</label>
+      <input class="form-control" name="email" id="email" required>
+      <input class="btn btn-primary" type="submit" value="Create Listing">
+      <a href='/' class="btn btn-primary" id="btn-submit" >Home</a>
+    </div>
+  </form>
+
 <h4><a href='/'>Back</a></h4>
 
 <a href='/logout'>logout</a>
