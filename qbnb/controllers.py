@@ -76,10 +76,11 @@ def home(user):
     # the login checking code all the time for other
     # front-end portals
 
-    # some fake product data
+    # update this and replace with real listings once 
+    # create listing interface is implemented
     products = [
-        {'name': 'prodcut 1', 'price': 10},
-        {'name': 'prodcut 2', 'price': 20}
+        {'name': 'product 1', 'price': 10},
+        {'name': 'product 2', 'price': 20}
     ]
     return render_template('index.html', user=user, products=products)
 
@@ -118,3 +119,21 @@ def logout():
     if 'logged_in' in session:
         session.pop('logged_in', None)
     return redirect('/')
+
+
+@app.route('/create_listing', methods=['GET'])
+def listing_creation_get():
+    # templates are stored in the templates folder
+    return render_template('create_listing.html', message='Create Listing')
+
+
+@app.route('/update_listing', methods=['GET'])
+def listing_update_get():
+    # templates are stored in the templates folder
+    return render_template('update_listing.html', message='Update Listing')
+
+
+@app.route('/update_profile', methods=['GET'])
+def profile_update_get():
+    # templates are stored in the templates folder
+    return render_template('update_profile.html', message='Update Profile')
