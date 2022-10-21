@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %}Update Profile{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<h2 id="update-profile-header">{{ message }}</h2>
+
+<h4><a href='/'>Back</a></h4>
+
+<a href='/logout'>logout</a>
+{% endblock %}
