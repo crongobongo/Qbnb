@@ -166,6 +166,38 @@ def listing_update_get():
     return render_template('update_listing.html', message='Update Listing')
 
 
+@app.route('/create_listing', methods=['POST'])
+def listing_update_post():
+    email = request.form.get('email')
+    title = request.form.get('title')
+    description = request.form.get('description')
+    price_get = request.form.get('price')
+    last_modified_date = request.form.get('last_modified_date')
+    error_message = None
+
+    try:
+        int(price_get)
+
+    except ValueError:
+        error_message = "Please enter an integer for price."
+        return render_template('create_listing.html', message=error_message)
+        
+    price = int(price_get)
+    # use backend api to register the user
+    success = create_listing(title, description, 
+                             price, last_modified_date, email)
+
+    if not success:
+        error_message = "Listing Update Failed."
+    # if there is any error messages when registering new user
+    # at the backend, go back to the register page.
+    if error_message:
+        return render_template('update_listing.html', message=error_message)
+    else:
+        return render_template('update_listing.html', 
+                               message="Listing Updated.")
+
+
 @app.route('/update_profile', methods=['GET'])
 def profile_update_get():
     # templates are stored in the templates folder
