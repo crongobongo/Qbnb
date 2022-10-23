@@ -1,6 +1,7 @@
 import email
 from flask import render_template, request, session, redirect
-from qbnb.models import login, User, Listing, register, create_listing, update_listing
+from qbnb.models import login, User, Listing, register, create_listing
+from qbnb.models import update_listing
 
 
 from qbnb import app
