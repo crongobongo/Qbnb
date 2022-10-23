@@ -1,6 +1,7 @@
 import email
 from flask import render_template, request, session, redirect
-from qbnb.models import login, User, register, create_listing
+from qbnb.models import login, User, Listing, register, create_listing
+from qbnb.models import update_listing
 
 
 from qbnb import app
@@ -184,8 +185,7 @@ def listing_update_post():
         
     price = int(price_get)
     # use backend api to register the user
-    success = create_listing(title, description, 
-                             price, last_modified_date, email)
+    success = update_listing(email, title, description, price)
 
     if not success:
         error_message = "Listing Update Failed."
