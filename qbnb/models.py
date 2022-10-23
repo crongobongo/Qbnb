@@ -241,7 +241,7 @@ def update_user(old_email, username, new_email, billing_address, postal_code):
     return user
 
 
-def create_listing(title_prod, desc_prod, price_prod, date, user_email):
+def create_listing(title_prod, desc_prod, price_prod, date, owner_email):
     '''
     R4-1: The title of the product has to be alphanumeric-only,
           and space allowed only if it is not as prefix and suffix.
@@ -300,11 +300,11 @@ def create_listing(title_prod, desc_prod, price_prod, date, user_email):
         return False
 
     # check owner id
-    user = User.query.filter_by(email=user_email).first()
+    user = User.query.filter_by(email=owner_email).first()
     title_exists = Listing.query.filter_by(title=title_prod).first()
 
     # check that the email isn't empty or does not exist in the database
-    if user_email == " ":
+    if owner_email == " ":
         return False
     if user is None:
         return False
@@ -316,7 +316,7 @@ def create_listing(title_prod, desc_prod, price_prod, date, user_email):
     # database and return True
     new_listing = Listing(title=title_prod, description=desc_prod,
                           price=price_prod, last_modified_date=date,
-                          owner_id=user_email)
+                          owner_id=owner_email)
     db.session.add(new_listing)
     db.session.commit()
     return True
