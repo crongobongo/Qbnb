@@ -180,7 +180,7 @@ def listing_update_post():
 
     except ValueError:
         error_message = "Please enter an integer for price."
-        return render_template('create_listing.html', message=error_message)
+        return render_template('update_listing.html', message=error_message)
         
     price = int(price_get)
     # use backend api to register the user
