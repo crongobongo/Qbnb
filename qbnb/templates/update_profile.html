@@ -6,7 +6,22 @@
 
 {% block content %}
 <h2 id="update-profile-header">{{ message }}</h2>
-
+<form method="post">
+    <div class="form-group">
+        <label for="old_email">Old Email</label>
+        <input class="form-control" type="email" name="old_email" id="old_email" required>
+        <label for="new_email">New Email</label>
+        <input class="form-control" type="email" name="new_email" id="new_email" required>
+        <label for="username">Username</label>
+        <input class="form-control" name="username" id="username" required>
+        <label for="billing_address">Billing Address</label>
+        <input class="form-control" name="billing_address" id="billing_address" required>
+        <label for="postal_code">Postal Code</label>
+        <input class="form-control" name="postal_code" id="postal_code" required>
+        <input class="btn btn-primary" type="submit" value="Update Profile">
+        <a href='/' class="btn btn-primary" id="btn-submit" >Home</a>
+    </div>
+</form>
 <h4><a href='/'>Back</a></h4>
 
 <a href='/logout'>logout</a>
