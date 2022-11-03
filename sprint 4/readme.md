@@ -1,6 +1,6 @@
-#Updates
+# Updates
 
-##Day 1
+## Day 1
 
 Dallin  1. Working on dallin_branch
         2. 3 register test cases written (input testing)
