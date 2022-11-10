@@ -1,14 +1,11 @@
 from qbnb.models import create_listing, login, update_user, db, User
 from qbnb.models import register, update_listing, datetime
 
-# test users for login
-db.session.add(User(email="test0@test.com", password="123aB!", 
-                    username="user0", billing_address="000", 
-                    postal_code="", balance="000"))
-db.session.add(User(email="test1@test.com", password="456ZxY?", 
-                    username="user1", billing_address="111", 
-                    postal_code="", balance="000"))
-db.session.commit()
+
+def test_r0_user_register():
+    # test users for login
+    assert register('user0', 'test0@test.com', '123aB!') is True
+    assert register('user1', 'test1@test.com', '456ZxY?') is True
 
 
 def test_r1_1_user_register():
