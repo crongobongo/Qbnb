@@ -176,7 +176,8 @@ class FrontEndHomePageTest(BaseCase):
         self.click('input[type="submit"]')
         time.sleep(1)  # test if the page loads correctly
         self.assert_element("#update-listing-header")
-        self.assert_text("Please enter an integer for price.", "#update-listing-header")
+        self.assert_text("Please enter an integer for price.",
+                         "#update-listing-header")
     ######################################################
 
     # Functionality Testing
