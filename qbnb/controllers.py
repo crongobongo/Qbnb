@@ -1,7 +1,7 @@
 import email
 from flask import render_template, request, session, redirect
 from qbnb.models import login, User, Listing, register, create_listing
-from qbnb.models import update_listing
+from qbnb.models import update_listing, update_user
 
 
 from qbnb import app
@@ -202,3 +202,24 @@ def listing_update_post():
 def profile_update_get():
     # templates are stored in the templates folder
     return render_template('update_profile.html', message='Update Profile')
+
+
+@app.route('/update_profile', methods=['POST'])
+def profile_update_post():
+    old_email = request.form.get('old_email')
+    new_email = request.form.get('new_email')
+    username = request.form.get('username')
+    billing_address = request.form.get('billing_address')
+    postal_code = request.form.get('postal_code')
+ 
+    # Use backend api to update the user
+    updated_user = update_user(old_email, username, new_email,
+                               billing_address, postal_code)
+   
+    # Return user update page
+    if updated_user is not None:
+        return render_template('update_profile.html',
+                               message="User Profile has been updated.")
+    else:
+        return render_template('update_profile.html',
+                               message="User Profile update has failed.")
