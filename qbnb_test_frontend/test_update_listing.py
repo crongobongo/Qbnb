@@ -152,7 +152,7 @@ class FrontEndHomePageTest(BaseCase):
         time.sleep(1)  # test if the page loads correctly
         self.assert_element("#update-listing-header")
         self.assert_text("Listing Update Failed.", "#update-listing-header")
-
+        
     def test_update_listing_output_success(self, *_):
         # Opens update listing page to recieve "Listing Updated." output
         self.open(base_url + '/update_listing')
@@ -164,6 +164,19 @@ class FrontEndHomePageTest(BaseCase):
         time.sleep(1)  # test if the page loads correctly
         self.assert_element("#update-listing-header")
         self.assert_text("Listing Updated.", "#update-listing-header")
+
+    def test_update_listing_output_price(self, *_):
+        # Opens update listing page to recieve
+        # "Please enter an integer for price." output
+        self.open(base_url + '/update_listing')
+        self.type("#email", "bengo3022@gmail.com")
+        self.type("#title", "N/A")
+        self.type("#description", "N/A")
+        self.type("#price", "ADA")
+        self.click('input[type="submit"]')
+        time.sleep(1)  # test if the page loads correctly
+        self.assert_element("#update-listing-header")
+        self.assert_text("Please enter an integer for price.", "#update-listing-header")
     ######################################################
 
     # Functionality Testing
