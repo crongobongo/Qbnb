@@ -382,7 +382,7 @@ class FrontEndHomePageTest(BaseCase):
 
         # all requirements are met
         self.type("#title", "The Chungus House")
-        self.type("#description", "Welcome to this very nice new Big Chungus house")
+        self.type("#description", "Welcome to this very nice new big house")
         self.type("#price", 1000)
         self.click('input[type="submit"]')     
     
@@ -401,7 +401,7 @@ class FrontEndHomePageTest(BaseCase):
 
         # invalid price, too low
         self.type("#title", "The Fungus House")
-        self.type("#description", "Welcome to this dirt cheap Big Chungus house")
+        self.type("#description", "Welcome to this very nice new big house")
         self.type("#price", 2)
         self.click('input[type="submit"]')
 
@@ -411,7 +411,7 @@ class FrontEndHomePageTest(BaseCase):
 
         # valid requirements
         self.type("#title", "The Fungus House")
-        self.type("#description", "Welcome to this dirt cheap Big Chungus house")
+        self.type("#description", "Welcome to this very nice new big house")
         self.type("#price", 1000)
         self.click('input[type="submit"]')
 
