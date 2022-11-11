@@ -407,7 +407,7 @@ class FrontEndHomePageTest(BaseCase):
 
         # output should confirm invalid listing creation
         self.assert_element("#message")
-        self.asser_text("Price must be between 10 and 10000", "#message")
+        self.assert_text("Price must be between 10 and 10000", "#message")
 
         # valid requirements
         self.type("#title", "The Fungus House")
