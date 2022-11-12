@@ -224,21 +224,6 @@ class FrontEndHomePageTest(BaseCase):
         self.assert_element("#create-listing-header")
         self.assert_text("Listing Creation Failed.", "#create-listing-header")
 
-    def test_create_listing_input_success(self, *_):
-        
-        # navigate to create listing page
-        self.open(base_url + '/create_listing')
-        # all requirements are met
-        self.type("#title", "The Chungus Yeet House")
-        self.type("#description", "Welcome to this very nice new big house")
-        self.type("#price", 1000)
-        self.type("#last_modified_date", "2022-11-11")
-        self.type("#email", "chungus@gmail.com")
-        self.click('input[type="submit"]')
-        time.sleep(1)  # test if the page loads correctly
-        self.assert_element("#create-listing-header")
-        self.assert_text("Listing Created.", "#create-listing-header")
-
     # Blackbox Testing Method 2 - Output Partition Testing
 
     def test_create_listing_output_failure(self, *_):
@@ -272,21 +257,6 @@ class FrontEndHomePageTest(BaseCase):
         self.assert_text("Please enter an integer for price.", 
                          "#create-listing-header")
 
-    def test_create_listing_output_success(self, *_):
-        
-        # navigate to create listing page
-        self.open(base_url + '/create_listing')
-        # all requirements are met
-        self.type("#title", "The Chungus Feet House")
-        self.type("#description", "Welcome to this very nice new big house")
-        self.type("#price", 1000)
-        self.type("#last_modified_date", "2022-11-11")
-        self.type("#email", "chungus@gmail.com")
-        self.click('input[type="submit"]')
-        time.sleep(1)  # test if the page loads correctly
-        self.assert_element("#create-listing-header")
-        self.assert_text("Listing Created.", "#create-listing-header")
-
     # Blackbox Testing Method 3 - Functionality Testing
 
     def test_create_listing_functionality_failure(self, *_):
@@ -302,11 +272,12 @@ class FrontEndHomePageTest(BaseCase):
         self.assert_element("#create-listing-header")
         self.assert_text("Listing Creation Failed.", "#create-listing-header")
 
-    def test_create_listing_functionality_success(self, *_):
+    def test_create_listing_success(self, *_):
+        
         # navigate to create listing page
         self.open(base_url + '/create_listing')
         # all requirements are met
-        self.type("#title", "The Chungus Sweet House")
+        self.type("#title", "The Chungus Feet House")
         self.type("#description", "Welcome to this very nice new big house")
         self.type("#price", 1000)
         self.type("#last_modified_date", "2022-11-11")

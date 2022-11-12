@@ -319,7 +319,6 @@ def create_listing(title_prod, desc_prod, price_prod, date, owner_email):
                           owner_id=owner_email)
     db.session.add(new_listing)
     db.session.commit()
-    print ("Everything works!")
     return True
 
 
