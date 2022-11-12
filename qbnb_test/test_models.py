@@ -439,11 +439,11 @@ def test_r5_2_update_listing():
     '''
     create_listing("New1 2Home", "This is a new nice home", 1000,
                    "2021-01-06", "test0@test.com")
-    listing = update_listing("test0@test.com", "", "", 2000)
+    listing = update_listing("test0@test.com", "N/A", "N/A", 2000)
     # Shows that the listing is created if the price updates to a higher value
     assert listing is not None
     # Shows that the listing is None if it is a lower value
-    listing = update_listing("test0@test.com", "", "", 1999)
+    listing = update_listing("test0@test.com", "N/A", "N/A", 1999)
     assert listing is None
 
 
@@ -454,7 +454,7 @@ def test_r5_3_update_listing():
     '''
     create_listing("New1 2Home", "This is a new nice home", 1000,
                    "2021-01-06", "test0@test.com")
-    listing = update_listing("test0@test.com", "", "", 2000)
+    listing = update_listing("test0@test.com", "N/A", "N/A", 2000)
     # Shows that the listing is None if it is a lower value
     assert listing.last_modified_date == datetime.date.today()
 
@@ -467,11 +467,11 @@ def test_r5_4_update_listing():
     create_listing("New1 2Home", "This is a new nice home",
                    1000, "2021-01-06", "test0@test.com")
     # Tests the title
-    listing = update_listing("test0@test.com", "./csa.", "", -1)
+    listing = update_listing("test0@test.com", "./csa.", "N/A", -1)
     assert listing is None
     # Tests the description
-    listing = update_listing("test0@test.com", "", "ha.", -1)
+    listing = update_listing("test0@test.com", "N/A", "ha.", -1)
     assert listing is None
     # Tests the price
-    listing = update_listing("test0@test.com", "", "", 3)
+    listing = update_listing("test0@test.com", "N/A", "N/A", 3)
     assert listing is None

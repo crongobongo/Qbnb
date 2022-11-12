@@ -63,25 +63,6 @@ class Booking(db.Model):
 
 db.create_all()
 
-# db = SQLAlchemy(app)
-
-
-# class User(db.Model):
-#     username = db.Column(
-#         db.String(80), nullable=False)
-#     email = db.Column(
-#         db.String(120), unique=True, nullable=False,
-#         primary_key=True)
-#     password = db.Column(
-#         db.String(120), nullable=False)
-
-#     def __repr__(self):
-#         return '<User %r>' % self.username
-
-
-# # create all tables
-# db.create_all()
-
 
 def register(name, email, password):
     # check that neither password or user is empty
@@ -350,7 +331,7 @@ def update_listing(owner_id, title, description, price):
     # checks to make sure each attribute is successfull
     
     # check if the title of the product meets the requirements
-    if title != "":
+    if title != "N/A":
         if len(title) <= 80 and title[0] != " " and title[-1] != " ":
             # go through each word and check that they are only alphanumerics
             title_check_regex = title.split(" ")
@@ -365,24 +346,23 @@ def update_listing(owner_id, title, description, price):
         if not (title_exists is None):
             return None
 
-    if description != "":
+    if description != "N/A":
         if len(description) < len(title):
             return None
         elif len(description) < 20 or len(description) > 2000:
             return None
-        
-        if price < 10 or price > 10000:
-            return None
 
     if price != -1:
+        if price < 10 or price > 10000:
+            return None
         # checks to make sure that price can only be increased  
         if price < listing.price:
             return None
 
     # updates the attributes of listing
-    if title != "":
+    if title != "N/A":
         listing.title = title
-    if description != "":
+    if description != "N/A":
         listing.description = description
     if price != -1:
         listing.price = price
