@@ -286,3 +286,31 @@ class FrontEndHomePageTest(BaseCase):
         time.sleep(1)  # test if the page loads correctly
         self.assert_element("#create-listing-header")
         self.assert_text("Listing Created.", "#create-listing-header")
+
+    # Blackbox Testing Method 3 - Functionality Testing
+
+    def test_create_listing_functionality_failure(self, *_):
+        # Opens create listing page
+        self.open(base_url + '/create_listing')
+        self.type("#title", "  SpacesBeforeAndAfter  ")
+        self.type("#description", "oh")
+        self.type("#price", 3)
+        self.type("#last_modified_date", "2009-11-11")
+        self.type("#email", "notAReal@gmail.com")
+        self.click('input[type="submit"]')
+        time.sleep(1)  # test if the page loads correctly
+        self.assert_element("#create-listing-header")
+        self.assert_text("Listing Creation Failed.", "#create-listing-header")
+
+    def test_create_listing_functionality_success(self, *_):
+        # Opens create listing
+        self.open(base_url + '/create_listing')
+        self.type("#title", "Biggy Chungus")
+        self.type("#description", "This is a complete description.")
+        self.type("#price", 1000)
+        self.type("#last_modified_date", "2022-11-11")
+        self.type("#email", "chungus@gmail.com")
+        self.click('input[type="submit"]')
+        time.sleep(1)  # test if the page loads correctly
+        self.assert_element("#create-listing-header")
+        self.assert_text("Listing Created.", "#create-listing-header")
