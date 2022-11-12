@@ -229,7 +229,7 @@ class FrontEndHomePageTest(BaseCase):
         # navigate to create listing page
         self.open(base_url + '/create_listing')
         # all requirements are met
-        self.type("#title", "The Chungus House")
+        self.type("#title", "The Chungiis House")
         self.type("#description", "Welcome to this very nice new big house")
         self.type("#price", 1000)
         self.type("#last_modified_date", "2022-11-11")
