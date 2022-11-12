@@ -225,11 +225,11 @@ class FrontEndHomePageTest(BaseCase):
         self.assert_text("Listing Creation Failed.", "#create-listing-header")
 
     def test_create_listing_input_success(self, *_):
-
+        
         # navigate to create listing page
         self.open(base_url + '/create_listing')
         # all requirements are met
-        self.type("#title", "The Chungiis House")
+        self.type("#title", "The Chungus Yeet House")
         self.type("#description", "Welcome to this very nice new big house")
         self.type("#price", 1000)
         self.type("#last_modified_date", "2022-11-11")
@@ -303,10 +303,11 @@ class FrontEndHomePageTest(BaseCase):
         self.assert_text("Listing Creation Failed.", "#create-listing-header")
 
     def test_create_listing_functionality_success(self, *_):
-        # Opens create listing
+        # navigate to create listing page
         self.open(base_url + '/create_listing')
-        self.type("#title", "Biggy Chungus")
-        self.type("#description", "This is a complete description.")
+        # all requirements are met
+        self.type("#title", "The Chungus Sweet House")
+        self.type("#description", "Welcome to this very nice new big house")
         self.type("#price", 1000)
         self.type("#last_modified_date", "2022-11-11")
         self.type("#email", "chungus@gmail.com")
