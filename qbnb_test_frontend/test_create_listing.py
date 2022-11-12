@@ -232,7 +232,7 @@ class FrontEndHomePageTest(BaseCase):
         self.type("#title", "The Chungus House")
         self.type("#description", "Welcome to this very nice new big house")
         self.type("#price", 1000)
-        self.type("#last_modified_date", "2029-11-11")
+        self.type("#last_modified_date", "2022-11-11")
         self.type("#email", "chungus@gmail.com")
         self.click('input[type="submit"]')
         time.sleep(1)  # test if the page loads correctly
