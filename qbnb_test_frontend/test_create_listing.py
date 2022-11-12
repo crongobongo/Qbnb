@@ -26,7 +26,7 @@ class FrontEndHomePageTest(BaseCase):
         self.type("#password2", "100Chungus!")
         self.click('input[type="submit"]')
 
-        time.sleep(1) # page should load correctly
+        time.sleep(1)  # page should load correctly
         self.assert_element("#message")
         self.assert_text("Please login", "#message")
 
@@ -39,6 +39,7 @@ class FrontEndHomePageTest(BaseCase):
         self.type("#last_modified_date", "2022-11-11")
         self.type("#email", "chungus@gmail.com")
         self.click('input[type="submit"]')
+        time.sleep(1)  # page should load correctly
         self.assert_element("#create-listing-header")
         self.assert_text("Listing Creation Failed.", "#create-listing-header")
 
@@ -53,6 +54,7 @@ class FrontEndHomePageTest(BaseCase):
         self.type("#last_modified_date", "2022-11-11")
         self.type("#email", "chungus@gmail.com")
         self.click('input[type="submit"]')
+        time.sleep(1)  # page should load correctly
         self.assert_element("#create-listing-header")
         self.assert_text("Listing Creation Failed.", "#create-listing-header")
 
@@ -67,6 +69,7 @@ class FrontEndHomePageTest(BaseCase):
         self.type("#last_modified_date", "2022-11-11")
         self.type("#email", "chungus@gmail.com")
         self.click('input[type="submit"]')
+        time.sleep(1)  # page should load correctly
         self.assert_element("#create-listing-header")
         self.assert_text("Listing Creation Failed.", "#create-listing-header")
 
@@ -81,6 +84,7 @@ class FrontEndHomePageTest(BaseCase):
         self.type("#last_modified_date", "2022-11-11")
         self.type("#email", "chungus@gmail.com")
         self.click('input[type="submit"]')
+        time.sleep(1)  # page should load correctly
         self.assert_element("#create-listing-header")
         self.assert_text("Listing Creation Failed.", "#create-listing-header")
 
@@ -95,6 +99,7 @@ class FrontEndHomePageTest(BaseCase):
         self.type("#last_modified_date", "2022-11-11")
         self.type("#email", "chungus@gmail.com")
         self.click('input[type="submit"]')
+        time.sleep(1)  # page should load correctly
         self.assert_element("#create-listing-header")
         self.assert_text("Listing Creation Failed.", "#create-listing-header")
 
@@ -109,6 +114,7 @@ class FrontEndHomePageTest(BaseCase):
         self.type("#last_modified_date", "2022-11-11")
         self.type("#email", "chungus@gmail.com")
         self.click('input[type="submit"]')
+        time.sleep(1)  # page should load correctly
         self.assert_element("#create-listing-header")
         self.assert_text("Listing Creation Failed.", "#create-listing-header")
 
@@ -123,6 +129,7 @@ class FrontEndHomePageTest(BaseCase):
         self.type("#last_modified_date", "2022-11-11")
         self.type("#email", "chungus@gmail.com")
         self.click('input[type="submit"]')
+        time.sleep(1)  # page should load correctly
         self.assert_element("#create-listing-header")
         self.assert_text("Listing Creation Failed.", "#create-listing-header")    
 
@@ -137,6 +144,7 @@ class FrontEndHomePageTest(BaseCase):
         self.type("#last_modified_date", "2022-11-11")
         self.type("#email", "chungus@gmail.com")
         self.click('input[type="submit"]')
+        time.sleep(1)  # page should load correctly
         self.assert_element("#create-listing-header")
         self.assert_text("Listing Creation Failed.", "#create-listing-header")
 
@@ -151,6 +159,7 @@ class FrontEndHomePageTest(BaseCase):
         self.type("#last_modified_date", "2022-11-11")
         self.type("#email", "chungus@gmail.com")
         self.click('input[type="submit"]')
+        time.sleep(1)  # page should load correctly
         self.assert_element("#create-listing-header")
         self.assert_text("Listing Creation Failed.", "#create-listing-header")
 
@@ -165,8 +174,10 @@ class FrontEndHomePageTest(BaseCase):
         self.type("#last_modified_date", "2022-11-11")
         self.type("#email", "chungus@gmail.com")
         self.click('input[type="submit"]')
+        time.sleep(1)  # page should load correctly
         self.assert_element("#create-listing-header")
-        self.assert_text("Please enter an integer for price.", "#create-listing-header")
+        self.assert_text("Please enter an integer for price.", 
+                         "#create-listing-header")
 
     def test_create_listing_input_email_failure(self, *_):
 
@@ -179,6 +190,7 @@ class FrontEndHomePageTest(BaseCase):
         self.type("#last_modified_date", "2022-11-11")
         self.type("#email", "chungoooooo@gmail.com")
         self.click('input[type="submit"]')
+        time.sleep(1)  # page should load correctly
         self.assert_element("#create-listing-header")
         self.assert_text("Listing Creation Failed.", "#create-listing-header")
 
@@ -257,7 +269,8 @@ class FrontEndHomePageTest(BaseCase):
         self.click('input[type="submit"]')
         time.sleep(1)  # test if the page loads correctly
         self.assert_element("#create-listing-header")
-        self.assert_text("Please enter an integer for price.", "#create-listing-header")
+        self.assert_text("Please enter an integer for price.", 
+                         "#create-listing-header")
 
     def test_create_listing_output_success(self, *_):
         
@@ -277,8 +290,7 @@ class FrontEndHomePageTest(BaseCase):
     # Blackbox Testing Method 3 - Functionality Testing
 
     def test_create_listing_functionality_failure(self, *_):
-        # Opens update listing page
-        # Updates all attributes incorrectly
+        # Opens create listing page
         self.open(base_url + '/create_listing')
         self.type("#email", "notAReal@gmail.com")
         self.type("#title", "  SpacesBeforeAndAfter  ")
@@ -290,8 +302,7 @@ class FrontEndHomePageTest(BaseCase):
         self.assert_text("Listing Creation Failed.", "#create-listing-header")
 
     def test_create_listing_functionality_success(self, *_):
-        # Opens update listing
-        # Updates all attributes correctly
+        # Opens create listing
         self.open(base_url + '/create_listing')
         self.type("#email", "chungus@gmail.com")
         self.type("#title", "Biggy Chungus")
