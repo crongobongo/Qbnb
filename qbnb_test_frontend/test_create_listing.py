@@ -272,6 +272,8 @@ class FrontEndHomePageTest(BaseCase):
         self.assert_element("#create-listing-header")
         self.assert_text("Listing Creation Failed.", "#create-listing-header")
 
+    # Successful testing for input/output/functionality
+
     def test_create_listing_success(self, *_):
         
         # navigate to create listing page
