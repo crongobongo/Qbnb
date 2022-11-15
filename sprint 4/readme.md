@@ -10,6 +10,20 @@ Dallin  1. Working on dallin_branch
         with the frontend testing, as I cannot figure out the bug at this point.
         4. Going to finish the rest of the test cases.
 
+Christian
+        1. Worked on christian_branch
+        2. Just reviewed the types of test cases
+
+## Day 3
+
+Christian
+        1. Just made the functionality test cases, no roadblocks
+
+## Day 5
+
+Christian
+        1. Finished the output cases, no roadblocks
+
 ## Day 9
 
 Benj    1. Working on bengo_branch
@@ -25,3 +39,8 @@ Benj    1. Working on bengo_branch
         The if statement for price < 10 and >10000, was accidentally nested into
         the description part which would sometimes return None for a correct 
         description and broke the testing in test_update_listing.
+
+Christian
+        1. Finished the input cases, small roadblocks fixed in the correct functionality testing
+        2. Running correctly on Pytest and Flake8
+        3. Pushed all my code to the christian_branch
