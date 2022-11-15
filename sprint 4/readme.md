@@ -44,3 +44,8 @@ Christian
         1. Finished the input cases, small roadblocks fixed in the correct functionality testing
         2. Running correctly on Pytest and Flake8
         3. Pushed all my code to the christian_branch
+
+Will
+        1. Working on will_branch
+        2. Fixed test case that caused internal server error
+        3. Fixed email checking in update profile

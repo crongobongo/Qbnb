@@ -209,9 +209,16 @@ def update_user(old_email, username, new_email, billing_address, postal_code):
         else:
             return None
     if new_email:
-        user.email = new_email
-        edited += 1
-        db.session.commit()
+        if (len(new_email) < 3):
+            return None
+        if re.match(r"([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]\
+    +)*|\"([]!#-[^-~ \t]|(\\[\t -~]))+\")@([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+\
+    /-9=?A-Z^-~]+)*|\[[\t -Z^-~]*])", new_email):
+            user.email = new_email
+            edited += 1
+            db.session.commit()
+        else:
+            return None
     if billing_address:
         user.billing_address = billing_address
         edited += 1
