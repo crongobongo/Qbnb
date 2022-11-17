@@ -1,11 +1,7 @@
 from qbnb.models import register
-import random, string
+import random
+import string
 
-
-
-# for line in Lines:
-#     user = line.strip()
-#     print(user)
 
 def test_user_register():
     file1 = open('qbnb_test/Generic_SQLI.txt', 'r')
@@ -21,11 +17,11 @@ def test_user_register():
 
         try:
             register(user, temp_email, "Abc12!")
-        except:
+        except Exception():
             print("An error occurred")
-        
 
     file1.close()
+
 
 def test_email_register():
     file1 = open('qbnb_test/Generic_SQLI.txt', 'r')
@@ -37,15 +33,15 @@ def test_email_register():
     for line in text:
         email = line.strip()
         user_num += 1
-        temp_username =username + str(user_num)
+        temp_username = username + str(user_num)
 
         try:
             register(temp_username, email, "Abc12!")
-        except:
+        except Exception():
             print("An error occurred")
 
-
     file1.close()
+
 
 def test_password_register():
     file1 = open('qbnb_test/Generic_SQLI.txt', 'r')
@@ -63,7 +59,7 @@ def test_password_register():
 
         try:
             register("test1", "test44@test44.com", password)
-        except:
+        except Exception():
             print("An error occurred")
 
     file1.close()
