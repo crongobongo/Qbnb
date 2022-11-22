@@ -74,6 +74,7 @@ def test_price_create_listing():
             print("An error occurred")
     file1.close()
 
+
 def test_date_create_listing():
     file1 = open('qbnb_test/Generic_SQLI.txt', 'r')
     text = file1.readlines()
@@ -98,6 +99,7 @@ def test_date_create_listing():
             print("An error occurred")
     file1.close()
 
+
 def test_email_create_listing():
     file1 = open('qbnb_test/Generic_SQLI.txt', 'r')
     text = file1.readlines()
@@ -116,7 +118,7 @@ def test_email_create_listing():
         # Tests the price for create listing
         # (with a different title each time)
         try:
-            create_listing(temp_title, "A very very very very very valid description.",
+            create_listing(temp_title, "A very very very valid description.",
                            800, "2022-11-11", email)
         except Exception():
             print("An error occurred")
