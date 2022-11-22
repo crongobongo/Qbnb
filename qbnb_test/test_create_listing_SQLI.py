@@ -73,3 +73,51 @@ def test_price_create_listing():
         except Exception():
             print("An error occurred")
     file1.close()
+
+def test_date_create_listing():
+    file1 = open('qbnb_test/Generic_SQLI.txt', 'r')
+    text = file1.readlines()
+    # Creates and registers a user
+    register("christian", "christian@gmail.com", "Abc12!")
+    # Initialize a title
+    title = "YeetYah"
+    # Counter for different titles
+    title_num = 0
+    # Go through each line
+    for line in text:
+        date = line.strip()
+        title_num += 1
+        # Different title each time
+        temp_title = title + str(title_num)
+        # Tests the price for create listing
+        # (with a different title each time)
+        try:
+            create_listing(temp_title, "A very valid description.",
+                           800, date, "christian@gmail.com")
+        except Exception():
+            print("An error occurred")
+    file1.close()
+
+def test_email_create_listing():
+    file1 = open('qbnb_test/Generic_SQLI.txt', 'r')
+    text = file1.readlines()
+    # Creates and registers a user
+    register("Daniel", "daniel@gmail.com", "Babadookc12!")
+    # Initialize a title
+    title = "ScoobyDooStickingTongueOut"
+    # Counter for different titles
+    title_num = 0
+    # Go through each line
+    for line in text:
+        email = line.strip()
+        title_num += 1
+        # Different title each time
+        temp_title = title + str(title_num)
+        # Tests the price for create listing
+        # (with a different title each time)
+        try:
+            create_listing(temp_title, "A very very very very very valid description.",
+                           800, "2022-11-11", email)
+        except Exception():
+            print("An error occurred")
+    file1.close()
