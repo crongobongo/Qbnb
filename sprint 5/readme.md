@@ -11,3 +11,6 @@ Will  1. Working on will_branch
 
 Dallin - Finished SQL injection testing on the register function. No issues were encountered and the SQL injection errors were encountered.
         
+## Day 5
+
+Ben   - Finished SQL injection testing on the create listing function. No issues were observed or encountered.
