@@ -11,9 +11,9 @@ To run testing:
 flake8 --select=E .  
 
 # run backend testing code 
-pytest -s qbay_test
+pytest -s qbnb_test
 
 # run frontend testing code 
-pytest -s qbay_test_frontend
+pytest -s qbnb_test_frontend
 
 ```

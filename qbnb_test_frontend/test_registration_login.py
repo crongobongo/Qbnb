@@ -335,4 +335,4 @@ class FrontEndHomePageTest(BaseCase):
         time.sleep(1)
         # test if the page loads correctly
         self.assert_element("#message")
-        self.assert_text('login failed', "#message") 
+        self.assert_text('login failed', "#message")
