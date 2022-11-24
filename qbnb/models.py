@@ -53,12 +53,10 @@ class Listing(db.Model):
 
 
 class Booking(db.Model):
-    # may need to edit these, eg. not sure about user_id?
-    id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.String(), primary_key=True)
     listing_id = db.Column(db.String(), primary_key=True)
-    price = db.Column(db.Integer, unique=True, nullable=False)
-    date = db.Column(db.String(), unique=True, nullable=False)
+    start_date = db.Column(db.String(), nullable=False)
+    end_date = db.Column(db.String(), nullable=False)
 
 
 db.create_all()
@@ -67,7 +65,7 @@ db.create_all()
 def register(name, email, password):
     # check that neither password or user is empty
     if (password is None) or (email is None):
-        return False
+        return None
 
     # check that email is valid
     email_regex = re.compile(r"([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]\
@@ -75,19 +73,19 @@ def register(name, email, password):
     /-9=?A-Z^-~]+)*|\[[\t -Z^-~]*])")
 
     if not re.match(email_regex, email):
-        return False
+        return None
     
     # check password is valid
     password_regex = re.compile(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*[-+_\
     !@#$%^&*., ?])\S{6,}$")
     if not re.match(password_regex, password):
-        return False
+        return None
 
     # check username is valid
     valid_name = True
     user_list = list(name)
     if ((len(name) <= 2) or (len(name) >= 20)):
-        return False
+        return None
 
     for i in range(len(user_list)):
         if (i == 0) or (i == len(user_list) - 1):
@@ -98,12 +96,12 @@ def register(name, email, password):
                 valid_name = False
 
     if valid_name is False:
-        return False
+        return None
 
     # check if the email has been used:
     existed = User.query.filter_by(email=email).all()
     if len(existed) > 0:
-        return False
+        return None
 
     # create a new user 
     # shipping address is empty, postal code is empty, balance = 100
@@ -115,7 +113,7 @@ def register(name, email, password):
     # actually save the user object
     db.session.commit()
 
-    return True
+    return user
 
 
 # email = db.Column(db.String(), unique=True, nullable=False)
@@ -251,21 +249,21 @@ def create_listing(title_prod, desc_prod, price_prod, date, owner_email):
             title_check_regex = title_prod.split(" ")
             for word in title_check_regex:
                 if not re.match(r'^[a-zA-Z0-9]+$', word):
-                    return False
+                    return None
         else:
-            return False
+            return None
     else:
-        return False
+        return None
     
     # check that the description of the product meets the requirements
     if len(desc_prod) < len(title_prod):
-        return False
+        return None
     elif len(desc_prod) < 20 or len(desc_prod) > 2000:
-        return False
+        return None
 
     # price should be in range [10:10000]    
     if price_prod < 10 or price_prod > 10000:
-        return False
+        return None
 
     # Year-Month-Date check if valid
     try:
@@ -277,15 +275,15 @@ def create_listing(title_prod, desc_prod, price_prod, date, owner_email):
         if int(date[:4]) >= 2021 and int(date[:4]) <= 2025:
             if date[:4] == "2021" and date[5:7] == "01":
                 if date[8:10] == "01":
-                    return False
+                    return None
 
             elif date[:4] == "2025" and date[5:7] == "01":
                 if date[8:10] != "01" or date[8:10] != "02":
-                    return False                 
+                    return None                 
         else:
-            return False
+            return None
     except ValueError:
-        return False
+        return None
 
     # check owner id
     user = User.query.filter_by(email=owner_email).first()
@@ -293,21 +291,21 @@ def create_listing(title_prod, desc_prod, price_prod, date, owner_email):
 
     # check that the email isn't empty or does not exist in the database
     if owner_email == " ":
-        return False
+        return None
     if user is None:
-        return False
+        return None
     # make sure the title hasn't been used before
     if not (title_exists is None):
-        return False
+        return None
     
     # if the listing requirements all pass, then add it to the
-    # database and return True
+    # database and return the listing
     new_listing = Listing(title=title_prod, description=desc_prod,
                           price=price_prod, last_modified_date=date,
                           owner_id=owner_email)
     db.session.add(new_listing)
     db.session.commit()
-    return True
+    return new_listing
 
 
 # R5-1: One can update all attributes of the listing, except
@@ -376,3 +374,36 @@ def update_listing(owner_id, title, description, price):
     # updates the last_modified_date since all operations were successfull
     listing.last_modified_date = datetime.date.today()
     return listing
+
+
+def create_booking(user_email, listing_title, start_date, end_date):
+    listing = Listing.query.filter_by(title=listing_title).first()
+    price = listing.price
+    owner_email = listing.owner_id
+    owner = User.query.filter_by(email=owner_email).first()
+    user = User.query.filter_by(email=user_email).first()
+
+    # A user cannot book a listing for his/her listing.
+    if owner_email == user_email:
+        return None
+    # A user cannot book a listing that costs more than his/her balance.
+    if user.balance < price:
+        return None
+    # A user cannot book a listing that is already 
+    # booked with the overlapped dates.
+    previous_bookings = Booking.query.filter_by(listing_id=listing_title).all()
+    for i in previous_bookings:
+        if ((i.start_date > start_date and i.start_date < end_date) or 
+                (i.end_date > start_date and i.end_date < end_date)):
+            return None
+
+    new_booking = Booking(user_id=user_email, listing_id=listing_title,
+                          start_date=start_date, end_date=end_date)
+
+    # change user and owner balances
+    owner.balance += price
+    user.balance -= price
+
+    db.session.add(new_booking)
+    db.session.commit()
+    return new_booking

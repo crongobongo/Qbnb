@@ -1,11 +1,11 @@
 from qbnb.models import create_listing, login, update_user, db, User
-from qbnb.models import register, update_listing, datetime
+from qbnb.models import register, update_listing, datetime, create_booking
 
 
 def test_r0_user_register():
     # test users for login
-    assert register('user0', 'test0@test.com', '123aB!') is True
-    assert register('user1', 'test1@test.com', '456ZxY?') is True
+    assert register('user0', 'test0@test.com', '123aB!') is not None
+    assert register('user1', 'test1@test.com', '456ZxY?') is not None
 
 
 def test_r1_1_user_register():
@@ -13,10 +13,10 @@ def test_r1_1_user_register():
     Testing R1-1: Email cannot be empty. password cannot be empty
     '''
 
-    assert register('userr11a', 'testr11a@test.com', '!2ASDa') is True
-    assert register('userr11b', '', '!2ASDa') is False
-    assert register('userr11c', 'testr11b@test.com', '') is False
-    assert register('userr11d', '', '') is False
+    assert register('userr11a', 'testr11a@test.com', '!2ASDa') is not None
+    assert register('userr11b', '', '!2ASDa') is None
+    assert register('userr11c', 'testr11b@test.com', '') is None
+    assert register('userr11d', '', '') is None
 
 
 def test_r1_2_user_register():
@@ -39,7 +39,7 @@ def test_r1_3_user_register():
     Testing R1-3: The email has to follow addr-spec defined in RFC 5322
     '''
 
-    assert register('userr13a', 'testr13acom', "AaBc!23") is False
+    assert register('userr13a', 'testr13acom', "AaBc!23") is None
 
 
 def test_r1_4_user_register():
@@ -50,10 +50,10 @@ def test_r1_4_user_register():
     and at least one special character.
     '''
 
-    assert register('userr14a', 'testr14a@test.com', '!2Aa') is False
-    assert register('user14b', 'testr14b@test.com', 'hello123') is False
-    assert register('user14c', 'testr14c@test.com', 'ASD123!!!') is False
-    assert register('userr14d', 'testr14d@test.com', '123ASDads') is False
+    assert register('userr14a', 'testr14a@test.com', '!2Aa') is None
+    assert register('user14b', 'testr14b@test.com', 'hello123') is None
+    assert register('user14c', 'testr14c@test.com', 'ASD123!!!') is None
+    assert register('userr14d', 'testr14d@test.com', '123ASDads') is None
 
 
 def test_r1_5_user_register():
@@ -62,9 +62,9 @@ def test_r1_5_user_register():
     and space allowed only if it is not as the prefix or suffix.
     '''
 
-    assert register("", 'testr15a@test.com', '123!asdA') is False
-    assert register('aasd@@@', 'testr15b@test.com', '123!asdA') is False
-    assert register(' Hello', 'testr15c@test.com', '123!asdA') is False
+    assert register("", 'testr15a@test.com', '123!asdA') is None
+    assert register('aasd@@@', 'testr15b@test.com', '123!asdA') is None
+    assert register(' Hello', 'testr15c@test.com', '123!asdA') is None
 
 
 def test_r1_6_user_register():
@@ -73,9 +73,9 @@ def test_r1_6_user_register():
     characters and less than 20 characters.
     '''
 
-    assert register('aa', "testr16a@test.com", "123!asdA") is False
+    assert register('aa', "testr16a@test.com", "123!asdA") is None
     assert register('aaaaaAAAAAbbbbbBBBBBc', 
-                    "testr16b@test.com", "123!asdA") is False
+                    "testr16b@test.com", "123!asdA") is None
 
 
 def test_r1_7_user_register():
@@ -83,9 +83,9 @@ def test_r1_7_user_register():
     Testing R1-7: If the email has been used, the operation failed.
     '''
 
-    assert register('userr17a', 'testr17a@test.com', '123aB!') is True
-    assert register('userr17b', 'testr17b@test.com', '456ZxY?') is True
-    assert register('userr17c', 'testr17a@test.com', '12Aac>56') is False
+    assert register('userr17a', 'testr17a@test.com', '123aB!') is not None
+    assert register('userr17b', 'testr17b@test.com', '456ZxY?') is not None
+    assert register('userr17c', 'testr17a@test.com', '12Aac>56') is None
 
 
 def test_r1_8_user_register():
@@ -95,7 +95,7 @@ def test_r1_8_user_register():
 
     register('userr18', "testr18@test.com", "!$weAr14")
     user = User.query.filter_by(email="testr18@test.com").first()
-    assert (user.billing_address == '') is True
+    assert (user.billing_address == '') is not None
 
 
 def test_r1_9_user_register():
@@ -105,7 +105,7 @@ def test_r1_9_user_register():
 
     register('userr19', "testr19@test.com", "!$weAr14")
     user = User.query.filter_by(email="testr19@test.com").first()
-    assert (user.postal_code == '') is True
+    assert (user.postal_code == '') is not None
 
 
 def test_r1_10_user_register():
@@ -116,7 +116,7 @@ def test_r1_10_user_register():
 
     register('userr110', "testr110@test.com", "!$weAr14")
     user = User.query.filter_by(email="testr110@test.com").first()
-    assert (user.balance == 100) is True
+    assert (user.balance == 100) is not None
 
 
 def test_r2_1_login():
@@ -291,15 +291,15 @@ def test_r4_1_create_list():
 
     # leading space in title
     listing = create_listing(" New Home", description, 1000, date, email)
-    assert listing is False
+    assert listing is None
 
     # trailing space in title
     listing = create_listing("New Home ", description, 1000, date, email)
-    assert listing is False
+    assert listing is None
 
     # correct implementation
     listing = create_listing("New1 2Home", description, 1000, date, email)
-    assert listing is True
+    assert listing is not None
 
 
 def test_r4_2_create_list():
@@ -312,7 +312,7 @@ def test_r4_2_create_list():
 
     # 81 character title
     listing = create_listing("X" * 81, description, 1000, date, email)
-    assert listing is False
+    assert listing is None
 
 
 def test_r4_3_create_list():
@@ -327,7 +327,7 @@ def test_r4_3_create_list():
 
     # length of description less than 20
     listing = create_listing("New Home", description, 1000, date, email)
-    assert listing is False
+    assert listing is None
 
 
 def test_r4_4_create_list():
@@ -339,7 +339,7 @@ def test_r4_4_create_list():
 
     # length of description shorter than length of title
     listing = create_listing("New Home", "This", 1000, date, email)
-    assert listing is False
+    assert listing is None
 
 
 def test_r4_5_create_list():
@@ -352,11 +352,11 @@ def test_r4_5_create_list():
 
     # price too low
     listing = create_listing("New Home", description, 9, date, email)
-    assert listing is False
+    assert listing is None
 
     # price too high
     listing = create_listing("New Home", description, 20000, date, email)
-    assert listing is False
+    assert listing is None
 
 
 def test_r4_6_create_list():
@@ -372,15 +372,15 @@ def test_r4_6_create_list():
 
     # date before valid date
     listing = create_listing("New Home", description, 1000, date1, email)
-    assert listing is False
+    assert listing is None
 
     # date after valid date
     listing = create_listing("New Home", description, 1000, date2, email)
-    assert listing is False
+    assert listing is None
 
     # date does not exist
     listing = create_listing("New Home", description, 1000, date3, email)
-    assert listing is False
+    assert listing is None
 
 
 def test_r4_7_create_list():
@@ -393,11 +393,11 @@ def test_r4_7_create_list():
     date = "2021-01-06"
     email = "test15@test.com"
     listing = create_listing("New1 2Home", description, 1000, date, " ")
-    assert listing is False
+    assert listing is None
 
     # email does not exist in the database
     listing = create_listing("New1 2Home", description, 1000, date, email)
-    assert listing is False
+    assert listing is None
 
 
 def test_r4_8_create_list():
@@ -409,7 +409,7 @@ def test_r4_8_create_list():
     date = "2021-01-06"
     email = "test0@test.com"
     listing1 = create_listing("New1 2Home", description, 1000, date, email)
-    assert listing1 is False
+    assert listing1 is None
 
 
 def test_r5_1_update_listing():
@@ -475,3 +475,106 @@ def test_r5_4_update_listing():
     # Tests the price
     listing = update_listing("test0@test.com", "N/A", "N/A", 3)
     assert listing is None
+
+
+def test_1_create_booking():
+    '''
+    A user can book a listing.
+    '''
+    user_email = "tommy17@email.com"
+    listing_title = "Big House"
+    owner = register("frank0", "frank0@email.com", "abC12!")
+
+    listing = (create_listing(listing_title, "This is a new nice big house", 
+                              100, "2022-01-01", owner.email))
+    user = register("tommy17", user_email, "abC12!")
+    assert listing is not None
+    assert user is not None
+
+    booking = (create_booking(user.email, listing_title, 
+                              "2022-01-06", "2022-01-09"))
+    assert booking is not None
+
+
+def test_2_create_booking():
+    '''
+    A user cannot book a listing for his/her listing.
+    '''
+    listing_title = "Large House"
+    owner = register("frank1", "frank1@email.com", "abC12!")
+
+    listing = (create_listing(listing_title, "This is a new nice big house", 
+                              100, "2022-01-01", owner.email))
+    assert listing is not None
+    assert owner is not None
+
+    booking = (create_booking(owner.email, listing_title, 
+                              "2022-01-06", "2022-01-09"))
+    assert booking is None
+
+
+def test_3_create_booking():
+    '''
+    A user cannot book a listing that costs more than his/her balance.
+    '''
+    user_email = "tommy20@email.com"
+    listing_title = "Giant House"
+    owner = register("frank20", "frank20@email.com", "abC12!")
+
+    listing = (create_listing(listing_title, "This is a new nice big house", 
+                              200, "2022-01-01", owner.email))
+    # default user balance is $100
+    user = register("tommy20", user_email, "abC12!")
+    assert listing is not None
+    assert user is not None
+
+    booking = (create_booking(user.email, listing_title, 
+                              "2022-01-06", "2022-01-09"))
+    assert booking is None
+
+
+def test_4_create_booking():
+    '''
+    A user cannot book a listing that is 
+    already booked with the overlapped dates.
+    '''
+    user_email = "tommy30@email.com"
+    user2_email = "johnny30@email.com"
+    listing_title = "Tiny House"
+    owner = register("frank30", "frank30@email.com", "abC12!")
+
+    listing = (create_listing(listing_title, "This is a new nice big house", 
+                              100, "2022-01-01", owner.email))
+    user = register("tommy30", user_email, "abC12!")
+    user2 = register("johnny30", user2_email, "abC12!")
+    assert listing is not None
+    assert user is not None
+    assert user2 is not None
+
+    user_booking = (create_booking(user.email, listing_title, 
+                                   "2022-01-06", "2022-01-09"))
+    # this overlaps
+    user2_booking = (create_booking(user2.email, listing_title, 
+                                    "2022-01-05", "2022-01-08"))
+    assert user2_booking is None
+
+
+def test_5_create_booking():
+    '''
+    A user and owner balances get updated
+    '''
+    user_email = "tommy18@email.com"
+    listing_title = "Small House"
+    owner = register("frank00", "frank00@email.com", "abC12!")
+
+    listing = (create_listing(listing_title, "This is a new nice big house", 
+                              100, "2022-01-01", owner.email))
+    user = register("tommy18", user_email, "abC12!")
+    assert listing is not None
+    assert user is not None
+
+    booking = (create_booking(user.email, listing_title, 
+                              "2022-01-06", "2022-01-09"))
+    assert booking is not None
+    assert user.balance == 0
+    assert owner.balance == 200
