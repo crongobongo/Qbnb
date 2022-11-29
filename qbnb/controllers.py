@@ -1,7 +1,7 @@
-import email
+import email, datetime
 from flask import render_template, request, session, redirect
 from qbnb.models import login, User, Listing, register, create_listing
-from qbnb.models import update_listing, update_user
+from qbnb.models import update_listing, update_user, create_booking
 
 
 from qbnb import app
@@ -146,7 +146,7 @@ def listing_creation_post():
         return render_template('create_listing.html', message=error_message)
         
     price = int(price_get)
-    # use backend api to register the user
+    # use backend api to creating listing instance
     success = create_listing(title, description, 
                              price, last_modified_date, email)
 
@@ -184,7 +184,7 @@ def listing_update_post():
         return render_template('update_listing.html', message=error_message)
         
     price = int(price_get)
-    # use backend api to register the user
+    # use backend api to create update listing instance
     success = update_listing(email, title, description, price)
 
     if not success:
@@ -223,3 +223,41 @@ def profile_update_post():
     else:
         return render_template('update_profile.html',
                                message="User Profile update has failed.")
+
+
+@app.route('/create_booking', methods=['GET'])
+def booking_creation_get():
+    # templates are stored in the templates folder
+    return render_template('create_booking.html', message='Create Booking')
+
+
+@app.route('/create_booking', methods=['POST'])
+def booking_creation_post():
+    user_email = request.form.get('user_email')
+    listing_title = request.form.get('listing_title')
+    start_date = request.form.get('start_date')
+    end_date = request.form.get('end_date')
+    error_message = None
+
+    try:
+        # check that the dates exist in the calender
+        datetime.datetime.strptime(start_date, '%Y-%m-%d')
+        datetime.datetime.strptime(end_date, '%Y-%m-%d')
+
+    except ValueError:
+        error_message = "Please enter a valid start and end date."
+        return render_template('create_listing.html', message=error_message)
+        
+    # use backend api to create the booking instance
+    success = create_booking(user_email, listing_title, 
+                             start_date, end_date)
+
+    if not success:
+        error_message = "Booking Creation Failed."
+    # if there is any error messages when booking listing
+    # at the backend, go back to the booking page.
+    if error_message:
+        return render_template('create_booking.html', message=error_message)
+    else:
+        return render_template('create_booking.html', 
+                               message="Booking Created.")
