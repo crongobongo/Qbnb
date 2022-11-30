@@ -52,7 +52,7 @@ class FrontEndHomePageTest(BaseCase):
         self.click('input[type="submit"]')
         time.sleep(1)  # page should load correctly
         self.assert_element("#create-booking-header")
-        self.assert_text("Booking Creation Failed.", "#create-listing-header")
+        self.assert_text("Booking Creation Failed.", "#create-booking-header")
 
     def test_create_booking_input_email2_failure(self, *_):
         
@@ -78,7 +78,7 @@ class FrontEndHomePageTest(BaseCase):
         self.click('input[type="submit"]')
         time.sleep(1)  # page should load correctly
         self.assert_element("#create-booking-header")
-        self.assert_text("Booking Creation Failed.", "#create-listing-header")
+        self.assert_text("Booking Creation Failed.", "#create-booking-header")
 
     def test_create_booking_input_title_failure(self, *_):
 
@@ -92,7 +92,7 @@ class FrontEndHomePageTest(BaseCase):
         self.click('input[type="submit"]')
         time.sleep(1)  # page should load correctly
         self.assert_element("#create-booking-header")
-        self.assert_text("Booking Creation Failed.", "#create-listing-header")
+        self.assert_text("Booking Creation Failed.", "#create-booking-header")
 
     def test_create_booking_input_success(self, *_):
 
@@ -106,7 +106,7 @@ class FrontEndHomePageTest(BaseCase):
         self.click('input[type="submit"]')
         time.sleep(1)  # page should load correctly
         self.assert_element("#create-booking-header")
-        self.assert_text("Booking Created.", "#create-listing-header")
+        self.assert_text("Booking Created.", "#create-booking-header")
 
     def test_create_booking_input_date_failure(self, *_):
 
@@ -120,4 +120,4 @@ class FrontEndHomePageTest(BaseCase):
         self.click('input[type="submit"]')
         time.sleep(1)  # page should load correctly
         self.assert_element("#create-booking-header")
-        self.assert_text("Booking Creation Failed.", "#create-listing-header")
+        self.assert_text("Booking Creation Failed.", "#create-booking-header")
