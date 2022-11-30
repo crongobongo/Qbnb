@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %}Create Booking{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<h2 id="create-booking-header">{{ message }}</h2>
+
+<form method="post">
+    <div class="form-group">
+      <label for="user_email">Email</label>
+      <input class="form-control" name="user_email" id="user_email" required>
+      <label for="listing_title">Listing Title</label>
+      <input class="form-control" name="listing_title" id="listing_title" required>
+      <label for="start_date">Start Date</label>
+      <input class="form-control" name="start_date" id="start_date" required>
+      <label for="end_date">End Date</label>
+      <input class="form-control" name="end_date" id="end_date" required>
+      <input class="btn btn-primary" type="submit" value="Create Booking">
+      <a href='/' class="btn btn-primary" id="btn-submit" >Home</a>
+    </div>
+  </form>
+
+<h4><a href='/'>Back</a></h4>
+
+<a href='/logout'>logout</a>
+{% endblock %}
