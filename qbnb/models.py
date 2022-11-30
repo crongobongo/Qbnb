@@ -387,6 +387,14 @@ def create_booking(user_email, listing_title, start_date, end_date):
     if user is None:
         return None
 
+    try:
+        # check that the dates exist in the calender
+        datetime.datetime.strptime(start_date, '%Y-%m-%d')
+        datetime.datetime.strptime(end_date, '%Y-%m-%d')
+
+    except ValueError:
+        return None
+
     # A user cannot book a listing for his/her listing.
     if owner_email == user_email:
         return None

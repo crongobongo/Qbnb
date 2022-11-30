@@ -240,36 +240,13 @@ def booking_creation_post():
     start_date = request.form.get('start_date')
     end_date = request.form.get('end_date')
     error_message = None
-
-    try:
-        # check that the dates exist in the calender
-        datetime.datetime.strptime(start_date, '%Y-%m-%d')
-        datetime.datetime.strptime(end_date, '%Y-%m-%d')
-
-    except ValueError:
-        error_message = "Please enter a valid start and end date."
-        return render_template('create_listing.html', message=error_message)
         
     # use backend api to create the booking instance
     success = create_booking(user_email, listing_title, 
                              start_date, end_date)
 
-    listing = Listing.query.filter_by(title=listing_title).first()
-    owner_email = listing.owner_id
-    owner = User.query.filter_by(email=owner_email).first()
-    user = User.query.filter_by(email=user_email).first()
-
-    previous_bookings = Booking.query.filter_by(listing_id=listing_title).all()
-    for i in previous_bookings:
-        if ((i.start_date > start_date and i.start_date < end_date) or 
-                (i.end_date > start_date and i.end_date < end_date)):
-            error_message == "Invalid booking date."
-
-    if not error_message:
-        if user_email == owner_email:
-            error_message == "Cannot book your own listing!"
-        elif not success:
-            error_message = "Booking Creation Failed."
+    if not success:
+        error_message = "Booking Creation Failed."
     # if there is any error messages when booking listing
     # at the backend, go back to the booking page.
     if error_message:

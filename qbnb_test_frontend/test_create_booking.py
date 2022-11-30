@@ -52,8 +52,7 @@ class FrontEndHomePageTest(BaseCase):
         self.click('input[type="submit"]')
         time.sleep(1)  # page should load correctly
         self.assert_element("#create-booking-header")
-        self.assert_text("Cannot book your own listing!", 
-            "#create-booking-header")
+        self.assert_text("Booking Creation Failed.", "#create-booking-header")
 
     def test_create_booking_input_email2_failure(self, *_):
         
@@ -107,17 +106,52 @@ class FrontEndHomePageTest(BaseCase):
         self.click('input[type="submit"]')
         time.sleep(1)  # page should load correctly
         self.assert_element("#create-booking-header")
-        self.assert_text("Invalid booking date.", "#create-booking-header")
+        self.assert_text("Booking Creation Failed.", "#create-booking-header")
 
     def test_create_booking_input_success(self, *_):
 
         # navigate to create booking page
+        self.open(base_url + '/register')
+        self.type("#email", "frank00@email.com")
+        self.type("#name", "frank00")
+        self.type("#password", "abC12!")
+        self.type("#password2", "abC12!")
+        self.click('input[type="submit"]')
+
+        time.sleep(1)  # page should load correctly
+        self.assert_element("#message")
+        self.assert_text("Please login", "#message")
+
+        # navigate to create listing page
+        self.open(base_url + '/create_listing')
+        # title contains leading space
+        self.type("#title", "Small House")
+        self.type("#description", "This is a new nice big house")
+        self.type("#price", 100)
+        self.type("#last_modified_date", "2022-01-01")
+        self.type("#email", "frank00@email.com")
+        self.click('input[type="submit"]')
+        time.sleep(1)  # page should load correctly
+        self.assert_element("#create-listing-header")
+        self.assert_text("Listing Created.", "#create-listing-header")
+
+        # navigate to create booking page
+        self.open(base_url + '/register')
+        self.type("#email", "tommy18@email.com")
+        self.type("#name", "tommy18")
+        self.type("#password", "abC12!")
+        self.type("#password2", "abC12!")
+        self.click('input[type="submit"]')
+
+        time.sleep(1)  # page should load correctly
+        self.assert_element("#message")
+        self.assert_text("Please login", "#message")
+
         self.open(base_url + '/create_booking')
-        # create a successful booking
-        self.type("#user_email", "cachamo@gmail.com")
-        self.type("#listing_title", "New House A")
-        self.type("#start_date", "2022-11-12")
-        self.type("#end_date", "2022-11-14")
+        self.type("#user_email", "tommy18@email.com")
+        self.type("#listing_title", "Small House")
+        self.type("#start_date", "2022-01-06")
+        self.type("#end_date", "2022-01-09")
         self.click('input[type="submit"]')
         time.sleep(1)  # page should load correctly
         self.assert_element("#create-booking-header")
