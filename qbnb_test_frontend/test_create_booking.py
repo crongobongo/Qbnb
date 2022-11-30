@@ -52,7 +52,8 @@ class FrontEndHomePageTest(BaseCase):
         self.click('input[type="submit"]')
         time.sleep(1)  # page should load correctly
         self.assert_element("#create-booking-header")
-        self.assert_text("Cannot book y=our own listing!", "#create-booking-header")
+        self.assert_text("Cannot book y=our own listing!", 
+        "#create-booking-header")
 
     def test_create_booking_input_email2_failure(self, *_):
         
