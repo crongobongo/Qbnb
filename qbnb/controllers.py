@@ -3,6 +3,7 @@ import datetime
 from flask import render_template, request, session, redirect
 from qbnb.models import login, User, Listing, register, create_listing
 from qbnb.models import update_listing, update_user, create_booking
+from qbnb.models import Booking
 
 
 from qbnb import app
@@ -253,8 +254,22 @@ def booking_creation_post():
     success = create_booking(user_email, listing_title, 
                              start_date, end_date)
 
-    if not success:
-        error_message = "Booking Creation Failed."
+    listing = Listing.query.filter_by(title=listing_title).first()
+    owner_email = listing.owner_id
+    owner = User.query.filter_by(email=owner_email).first()
+    user = User.query.filter_by(email=user_email).first()
+
+    previous_bookings = Booking.query.filter_by(listing_id=listing_title).all()
+    for i in previous_bookings:
+        if ((i.start_date > start_date and i.start_date < end_date) or 
+                (i.end_date > start_date and i.end_date < end_date)):
+            error_message == "Invalid booking date."
+
+    if not error_message:
+        if user_email == owner_email:
+            error_message == "Cannot book your own listing!"
+        elif not success:
+            error_message = "Booking Creation Failed."
     # if there is any error messages when booking listing
     # at the backend, go back to the booking page.
     if error_message:
