@@ -378,10 +378,22 @@ def update_listing(owner_id, title, description, price):
 
 def create_booking(user_email, listing_title, start_date, end_date):
     listing = Listing.query.filter_by(title=listing_title).first()
+    if listing is None:
+        return None
     price = listing.price
     owner_email = listing.owner_id
     owner = User.query.filter_by(email=owner_email).first()
     user = User.query.filter_by(email=user_email).first()
+    if user is None:
+        return None
+
+    try:
+        # check that the dates exist in the calender
+        datetime.datetime.strptime(start_date, '%Y-%m-%d')
+        datetime.datetime.strptime(end_date, '%Y-%m-%d')
+
+    except ValueError:
+        return None
 
     # A user cannot book a listing for his/her listing.
     if owner_email == user_email:
