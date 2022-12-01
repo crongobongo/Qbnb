@@ -332,7 +332,6 @@ def update_listing(owner_id, title, description, price):
     listing = Listing.query.filter_by(owner_id=owner_id).first()
     if listing is None:
         return None
-
     # checks to make sure each attribute is successfull
     
     # check if the title of the product meets the requirements
