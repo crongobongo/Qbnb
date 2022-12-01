@@ -20,3 +20,10 @@ Christian 1. Working on christian_branch
 Christian 1. Working on christian_branch
           2. Worked on front end testing: input partitioning
           3. Minor problems with error messages on controllers.py
+
+## Day 6
+
+Benjamin  1. Working on christian_branch
+          2. Finished rest of frontend testing
+          3. Finished Security Testing
+          3. Added booking listing to html page
