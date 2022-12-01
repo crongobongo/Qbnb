@@ -82,11 +82,43 @@ def home(user):
 
     # update this and replace with real listings once 
     # create listing interface is implemented
-    products = [
-        {'name': 'product 1', 'price': 10},
-        {'name': 'product 2', 'price': 20}
+    listings = [
+        {'Title': 'Apartment 85',
+            'Description': "Exteremly garbage rent out place.",
+            'Price': 150,
+            'Date': "2022-01-01", 'Email': 'ownerman@gmail.com'},
+        {'Title': 'Apartment 68',
+            'Description': "A Appartment with a 1 table and a chair.",
+            'Price': 300, 'Date': "2022-02-01", 'Email': 'ownerman@gmail.com'},
+        {'Title': 'Apartment 100',
+            'Description': "Top tier apartment, coat hanger made of gold",
+            'Price': 1000, 'Date': "2022-03-01",
+            'Email': 'ownerman@gmail.com'},
+        {'Title': 'John Buckle House',
+            'Description': "This is just my house man, please buy.",
+            'Price': 500, 'Date': "2022-02-01",
+            'Email': 'johnbucklenickle@gmail.com'},
+        {'Title': 'Cardboard Box',
+            'Description': "It's next to the convenience store, convenient.",
+            'Price': 151, 'Date': "2022-01-01",
+            'Email': 'ineedatenantplease@gmail.com'},
+        {'Title': 'Worn Down House',
+            'Description': "Infested with squids. half-underwater.",
+            'Price': 500, 'Date': "2022-02-01",
+            'Email': 'pleasebymyplace@gmail.com'},
     ]
-    return render_template('index.html', user=user, products=products)
+    bookings = [
+        {'Email': 'poorman@gmail.com', 'ListingTitle': 'Apartment 85',
+            'StartDate': '2022-01-01', 'EndDate': "2022-01-05"},
+        {'Email': 'poorman@gmail.com', 'ListingTitle': 'Cardboard Box',
+            'StartDate': '2022-01-05', 'EndDate': "2022-01-20"},
+        {'Email': 'johnwife@gmail.com', 'ListingTitle': 'John Bubkle House',
+            'StartDate': '2022-02-01', 'EndDate': "2022-03-04"},
+        {'Email': 'aquamanreal@gmail.com', 'ListingTitle': 'Worn Down House',
+            'StartDate': '2022-02-01', 'EndDate': "2022-03-02"},
+    ]
+    return render_template('index.html', user=user, listings=listings,
+                           bookings=bookings)
 
 
 @app.route('/register', methods=['GET'])

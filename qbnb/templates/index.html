@@ -8,12 +8,22 @@
 <h2 id="welcome-header">Welcome {{ user.username }} !</h2>
 
 
-<h2>Here are all available products</h2>
+<h2>Here are all available listings</h2>
 
-<div id="products">
-    {% for product in products %}
+<div id="listings">
+    {% for listing in listings %}
     <div>
-        <h4>name: {{ product.name }} price: {{ product.price }} <a href='/update_listing'>update</a></h4>
+        <h4>Title: {{ listing.Title }} \ Description: {{ listing.Description }} \ Price: {{ listing.Price }} \ Date: {{ listing.Date }} \ Email: {{ listing.Email }}  <a href='/update_listing'>update</a></h4>
+    </div>
+    {% endfor %}
+</div>
+
+<h2>Here are all bookings</h2>
+
+<div id="bookings">
+    {% for booking in bookings %}
+    <div>
+        <h4>Email: {{ booking.Email }} \ Listing Title: {{ booking.ListingTitle }} \ Start Date: {{ booking.StartDate }} \ End Date: {{ booking.EndDate }} </h4>
     </div>
     {% endfor %}
 </div>
