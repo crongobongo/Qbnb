@@ -1,7 +1,7 @@
 version: "2"
 services:
   qbay-web:
-    image: idealspork/qbnb:v1
+    image: idealspork/qbnb:v2
     depends_on:
       - qbay-db
     links:
