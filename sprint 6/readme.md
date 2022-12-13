@@ -27,3 +27,9 @@ Benjamin  1. Working on christian_branch
           2. Finished rest of frontend testing
           3. Finished Security Testing
           3. Added booking listing to html page
+
+## Day 12
+
+Will 1. Working on will_branch
+     2. Create new version of docker repo
+     3. Updated image 
